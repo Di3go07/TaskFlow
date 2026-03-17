@@ -1,15 +1,12 @@
-import {Produto, ListaProdutos} from './models.js';
+import express from "express";
+import tasksRoutes from "./routes/tasks.js";
 
-async function index() {
-    const produto1 = new Produto('Notebook Dell', 10, 2500);
-    const produto2 = new Produto('Celular Motorola', 15, 930);
-    const produto3 = new Produto('Fone bluetooth', 12, 150);
+const app = express();
 
-    const meusProdutos = new ListaProdutos();
-    meusProdutos.lista = [produto1, produto2, produto3];
+// -- Routes --
+app.use('/tasks/', tasksRoutes);
 
-    await meusProdutos.salvarProdutos();
-    await meusProdutos.lerTabela()
-}
-
-index()
+// --  Server --
+var server = app.listen(5000, function () {
+   console.log("Express App running at http://127.0.0.1:5000/");
+})
