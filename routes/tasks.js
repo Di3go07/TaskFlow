@@ -2,6 +2,7 @@ import express from 'express';
 import path from "path";
 import { fileURLToPath } from 'url';
 import fs from "fs";
+import { createTask } from '../database/querys/manipulateTasks.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,32 +13,70 @@ const router = express.Router();
 
 // GET "/tasks" - Lista todas as tarefas 
 router.get('/', function (req, res) {
-    fs.readFile( taskPath, 'utf8', function (err, data) {
-      if (err) {
-         res.status(500).end(JSON.stringify({ error: "Erro ao ler o arquivo" }));
-         return;
-      }
-      res.end( data );
-   });
+   //inserir função
  })
  
 // GET "/tasks/:id" - Filtra uma tarefa específica
 router.get('/:id', function (req, res) {
-   fs.readFile(taskPath, 'utf8', function (err, data) {
-      if (err) {
-         res.status(500).end(JSON.stringify({ error: "Erro ao ler o arquivo" }));
-         return;
-      }
-      
-      const taskList = JSON.parse(data); 
-      var task = taskList.tasks.find(t => t.id === parseInt(req.params.id));
- 
-      if(task){
-         res.end(JSON.stringify(task));
-      } else {
-         res.status(404).end(JSON.stringify({ error: "Task não encontrada" }));
-      }
-   });
+   //inserir função
+})
+
+// POST "tasks/create" - Adiciona uma nova tarefa
+router.post('/create', function(req, res) {
+
+   //Objeto da nova tarefa com os dados passados
+   const newTask = {
+      user_id: req.body.user_id,
+      name: req.body.name,
+      description: req.body.description,
+      deadline: req.body.deadline,
+      urgency: req.body.urgency,
+      status: req.body.status || 'pendente',
+      created_at: new Date()
+   };
+   
+   // Validação básica
+   if (!newTask.user_id) {
+      return res.status(500).json({ 
+         error: "Id do usuário é obrigatório",
+      });
+   }
+   if (!newTask.name) {
+      return res.status(500).json({ 
+         error: "Nome é um campo obrigatório",
+      });
+   }
+   if (newTask.description.length > 80) {
+      return res.status(500).json({ 
+         error: "Descrição ultrapassa o limite de 80 caracteres",
+      });
+   }
+
+   //chama a função para adicionar a tarefa no banco
+   createTask(newTask)
+      .then(result => {
+         res.status(200).json({ 
+            mensagem: "Task adicionada com sucesso!",
+            task: result 
+         });
+      })
+      .catch(error => {
+         console.error("Erro ao criar task:", error);
+         res.status(500).json({ 
+            error: "Erro ao adicionar a tarefa",
+            detalhe: error.message 
+         });
+      });
+})
+
+// DELETE "tasks/:id" - Deleta uma tarefa 
+router.delete('/:id', function(req, res) {
+   //inserir função
+})
+
+// PUT "tasks/editar/:id" - Edita as informações de uma tarefa 
+router.put('/editar/:id', function(req, res) {
+   //inserir função  
 })
 
 export default router;
