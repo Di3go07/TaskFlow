@@ -2,7 +2,7 @@ import express from 'express';
 import path from "path";
 import { fileURLToPath } from 'url';
 import fs from "fs";
-import { readTasks, readTask, createTask, deleteTask } from '../database/querys/manipulateTasks.js'
+import { readTasks, readTask, createTask, updateTask, deleteTask } from '../database/querys/manipulateTasks.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -138,7 +138,36 @@ router.delete('/:id', function(req, res) {
 
 // PUT "tasks/editar/:id" - Edita as informações de uma tarefa 
 router.put('/editar/:id', function(req, res) {
-   //adicionar função
+   const id = req.params.id
+   const newTask = {
+      user_id: req.body.user_id || null,
+      name: req.body.name || null,
+      description: req.body.description || null,
+      deadline: req.body.deadline || null,
+      urgency: req.body.urgency || null,
+      status: req.body.status || null,
+   };
+
+   updateTask(id, newTask)
+   .then(result => {
+      if (result.affectedRows === 0) {
+         res.status(404).json({
+            error: `O id ${taskId} não remete a alguma tarefa`
+         })
+      } else {
+         res.status(200).json({ 
+            mensagem: "Task atualizada com sucesso!",
+            task: result 
+         });
+      }
+   })
+   .catch(error => {
+      console.error("Erro ao criar task:", error);
+      res.status(500).json({ 
+         error: "Erro ao atualizar a tarefa",
+         detalhe: error.message 
+      });
+   });
 })
 
 export default router;
