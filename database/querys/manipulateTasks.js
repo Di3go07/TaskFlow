@@ -19,7 +19,6 @@ async function createTable() {
             status ENUM('pendente', 'andamento', 'concluida', 'abandonada') DEFAULT 'pendente',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );`;
-
         con.query(qry, (err, result) => {
             if (err) {
                 reject(err);
@@ -33,24 +32,57 @@ async function createTable() {
 
 // -- Manipulações no banco --
 
+export async function readTasks() {
+    /*
+    readTasks() essa função retorna todas as instâncias de tarefas armazenadas no banco 
+    */
+    const con = await db; //inicializa o banco
+    await createTable() //verifica se a tabela esta criada
+
+    const query = 'SELECT * FROM tasks' //query de busca
+
+    return new Promise((resolve, reject) => { //promise  com a resposta
+       con.query(query, (err, result) => { //função que realiza a busca em segundo plano da aplicação
+        err ? reject(err) : resolve(result);
+       }) 
+    });
+}
+
+export async function readTask(id) {
+    /*
+    readTask(id) recebe o id de uma tarefa e retorna a sua instância no banco
+    */
+    const con = await db;
+    await createTable();
+
+    const query = 'SELECT * FROM tasks WHERE id = ?';
+
+    return new Promise((resolve, reject) => {
+        con.query(query, [id], (err, result) => {
+            err ? reject(err) : resolve(result);
+        })
+    })
+}
+
 export async function createTask(newTask) {
     /*
     createTask(newTask) essa função recebe um objeto da classe Task e resgata suas informações para armazenar essa instância na tabela do banco de dados.
     */
     const con = await db; //inicializa o banco
     await createTable() //verifica se a tabela esta criada
-    return new Promise((resolve, reject) => {
-        const query = 'INSERT INTO tasks (user_id, name, description, deadline, urgency, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)'; 
-        const values = [
-            newTask.user_id,
-            newTask.name,
-            newTask.description || null,
-            newTask.deadline || null,
-            newTask.urgency || 'media',
-            newTask.status || 'pendente',
-            newTask.created_at || new Date()
-        ];
 
+    const query = 'INSERT INTO tasks (user_id, name, description, deadline, urgency, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)'; 
+    const values = [
+        newTask.user_id,
+        newTask.name,
+        newTask.description || null,
+        newTask.deadline || null,
+        newTask.urgency || 'media',
+        newTask.status || 'pendente',
+        newTask.created_at || new Date()
+    ];
+
+    return new Promise((resolve, reject) => {
         con.query(query, values, (err, result) => { //aciona a query de push na tabela 'tasks'
             if (err) {
                 reject(err);
@@ -65,3 +97,18 @@ export async function createTask(newTask) {
     });
 }
 
+export async function deleteTask(id) {
+    /*
+    deleteTask(id) recebe o id da tarefa e exclui a instância do banco
+    */
+    const con = await db; //inicializa o banco
+    await createTable() //verifica se a tabela esta criada
+
+    const query = 'DELETE FROM tasks WHERE id = ?';
+
+    return new Promise((resolve, reject) => {
+        con.query(query, [id], (err, result) => {
+            err ? reject(err) : resolve(result);
+        });
+    })
+}

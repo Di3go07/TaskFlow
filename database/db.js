@@ -12,7 +12,7 @@ const con = mysql.createConnection({
 const db = new Promise((resolve, reject) => {
     con.connect(function (err) {
         if (err) reject(err);
-        console.log("Connected!");
+        console.log("Connected!"); 
     
         con.query('CREATE DATABASE IF NOT EXISTS taskflow', (err) =>{
             if (err) reject(err);
