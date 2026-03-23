@@ -1,11 +1,13 @@
 import express from "express";
 import tasksRoutes from "./routes/tasks.js";
+import usersRoutes from "./routes/users.js"
 
 const app = express();
 app.use(express.json());
 
 // -- Rotas --
 app.use('/tasks', tasksRoutes);
+app.use('/auth', usersRoutes)
 
 // --  Server --
 var server = app.listen(5000, function () {

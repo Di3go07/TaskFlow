@@ -1,13 +1,6 @@
 import express from 'express';
-import path from "path";
-import { fileURLToPath } from 'url';
-import fs from "fs";
 import { readTasks, readTask, createTask, updateTask, deleteTask } from '../database/querys/manipulateTasks.js'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const taskPath =  __dirname + "/../tasks.json";
-console.log(taskPath)
 
 const router = express.Router();
 
@@ -71,24 +64,24 @@ router.post('/create', function(req, res) {
    
    // Validação básica dos campos
    if (!newTask.user_id) {
-      return res.status(500).json({ 
+      return res.status(400).json({ 
          error: "Id do usuário é obrigatório",
       });
    }
    if (!newTask.name) {
-      return res.status(500).json({ 
+      return res.status(400).json({ 
          error: "Nome é um campo obrigatório",
       });
    }
    if (newTask.description.length > 80) {
-      return res.status(500).json({ 
+      return res.status(400).json({ 
          error: "Descrição ultrapassa o limite de 80 caracteres",
       });
    }
    const deadlineDate = new Date(newTask.deadline);
    const dataAtual = new Date();
    if (deadlineDate < dataAtual) {
-      return res.status(500).json({ 
+      return res.status(400).json({ 
          error: "A data do deadline já passou. Escolha uma data futura.",
       });
    }
@@ -96,7 +89,7 @@ router.post('/create', function(req, res) {
    //chama a função para adicionar a tarefa no banco
    createTask(newTask)
       .then(result => {
-         res.status(200).json({ 
+         res.status(201).json({ 
             mensagem: "Task adicionada com sucesso!",
             task: result 
          });
