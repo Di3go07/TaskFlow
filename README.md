@@ -1,6 +1,6 @@
-# TaskFlow
+# 📑 TaskFlow
 
-## Apresentação 
+## 📌 Apresentação 
 Desenvolvido para simplificar a rotina do usuário, o projeto TaskFlow oferece uma solução completa para organização de tarefas, permitindo o acompanhamento de prazos e status de forma prática e eficiente. Com foco na experiência do usuário (UX), a interface foi projetada para ser intuitiva, visualmente agradável e adaptável a diferentes dispositivos, garantindo acessibilidade e conforto em qualquer contexto. 
 
 O site foi desenvolvido de forma Full-Stack. Isto é, a aplicação entrega tanto o desenvolvimento do back-end, o lado do servidor que lida com requisições de API e manipulações no banco de dados, quanto do front-end, voltado ao desenvolvimento da interface web. 
@@ -9,9 +9,21 @@ O site foi desenvolvido de forma Full-Stack. Isto é, a aplicação entrega tant
 <a href="#" target="_blank"><img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React"></a>
 <a href="#" target="_blank"><img src="https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite"></a>
 
-## Funcionalidades
+## 📋 Funcionalidades
 
-## Banco de dados
+A aplicação oferece uma interface gráfica intuitiva para o ciclo completo de gerenciamento de tarefas:
+
+✍️ Criação de novos tarefas 
+   
+🔧 Edição de tarefas
+
+👁️ Visualização em tempo real
+
+🗑️ Exclusão controlada de tarefas
+
+Todas as tarefas são armazenados e gerenciados diretamente no servidor do projeto. Essas funcionalidades também se aplicam para o sistema de usuários e notas
+
+## 💾 Banco de dados
 
 ```mermaid
 erDiagram
@@ -73,7 +85,7 @@ Para rodar o projeto Hanagr 18 localmente, você precisará ter os seguintes ite
     Crie um usuário 
 
 
-## Back-end
+## 🗄️ Back-end
 O back-end da aplicação, desenvolvido em Node.js, cria automaticamente o banco de dados e as tabelas necessárias na primeira execução. Para colocar o servidor em produção, é necessário seguir algumas etapas prévias:
 
 1. Crie um arquivo ```.env``` na raiz do diretório com as seguintes variáveis:
