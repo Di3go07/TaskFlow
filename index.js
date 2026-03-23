@@ -1,7 +1,9 @@
 import express from "express";
 import tasksRoutes from "./routes/tasks.js";
 import usersRoutes from "./routes/users.js"
+import dotenv from 'dotenv';
 
+dotenv.config(); //le as variáveis locais
 const app = express();
 app.use(express.json());
 

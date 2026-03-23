@@ -1,6 +1,8 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { createUser, readUsers } from '../database/querys/manipulateUsers.js'
+import { authJwt } from '../middleware/authJwt.js'
 
 const router = express.Router();
 
@@ -76,6 +78,46 @@ router.post('/register', async function(req,res) {
                 detalhe: error.message 
             });
         });
+})
+
+//POST "auth/login" - Realiza o login de um usuário
+router.post('/login', async function (req, res) {
+
+    //validação básica dos campos
+    if (req.body.username.length > 50 || !req.body.username) {
+        return res.status(400).json({ 
+           error: "Nome de usuário deve ser informado e não ultrapassar o limite de 50 caracteres"
+        });
+    }
+    if (req.body.email.length > 255) {
+        return res.status(400).json({ 
+           error: "O email ultrapassa o limite de 255 caracteres"
+        });
+    }
+    if (req.body.password.length > 50 || !req.body.password) {
+        return res.status(400).json({ 
+           error: "A senha deve ser informada e não pode ultrapassar o limite de 50 caracteres"
+        });
+    }
+    if (req.body.password !== req.body.confirm_password){
+        return res.status(400).json({ 
+            error: "As senhas devem coincidir"
+         });
+    }
+
+    const username = req.body.username;
+    const email = req.body.email
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);   //criptografia da senha
+
+    const user = {
+        username: username,
+        email: email,
+        password: hashedPassword
+    }
+
+    const accessToken = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '15m' }); //gera o token 
+
+    res.json({ accessToken }); //retorna o token
 })
 
 // PUT "auth/edit" - Edita os dados do usuário conetado atualmente, a partir do token passados

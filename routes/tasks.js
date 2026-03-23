@@ -1,11 +1,11 @@
 import express from 'express';
 import { readTasks, readTask, createTask, updateTask, deleteTask } from '../database/querys/manipulateTasks.js'
-
+import { authJwt } from '../middleware/authJwt.js'
 
 const router = express.Router();
 
 // GET "/tasks" - Lista todas as tarefas 
-router.get('/', function (req, res) {
+router.get('/', authJwt, function (req, res) {
    readTasks()
       .then(result => {
          res.status(200).json({ 
@@ -23,7 +23,7 @@ router.get('/', function (req, res) {
 })
  
 // GET "/tasks/:id" - Filtra uma tarefa específica
-router.get('/:id', function (req, res) {
+router.get('/:id', authJwt, function (req, res) {
    const taskId = req.params.id;
 
    readTask(taskId)
@@ -49,7 +49,7 @@ router.get('/:id', function (req, res) {
 })
 
 // POST "tasks/create" - Adiciona uma nova tarefa
-router.post('/create', function(req, res) {
+router.post('/create', authJwt, function(req, res) {
 
    //Objeto da nova tarefa com os dados passados
    const newTask = {
@@ -104,7 +104,7 @@ router.post('/create', function(req, res) {
 })
 
 // DELETE "tasks/:id" - Deleta uma tarefa 
-router.delete('/:id', function(req, res) {
+router.delete('/:id', authJwt, function(req, res) {
    const taskId = req.params.id;
 
    deleteTask(taskId) 
@@ -130,7 +130,7 @@ router.delete('/:id', function(req, res) {
 })
 
 // PUT "tasks/editar/:id" - Edita as informações de uma tarefa 
-router.put('/editar/:id', function(req, res) {
+router.put('/editar/:id', authJwt, function(req, res) {
    const id = req.params.id
    const newTask = {
       user_id: req.body.user_id || null,

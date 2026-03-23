@@ -1,0 +1,102 @@
+# TaskFlow
+
+## Apresentação 
+Desenvolvido para simplificar a rotina do usuário, o projeto TaskFlow oferece uma solução completa para organização de tarefas, permitindo o acompanhamento de prazos e status de forma prática e eficiente. Com foco na experiência do usuário (UX), a interface foi projetada para ser intuitiva, visualmente agradável e adaptável a diferentes dispositivos, garantindo acessibilidade e conforto em qualquer contexto. 
+
+O site foi desenvolvido de forma Full-Stack. Isto é, a aplicação entrega tanto o desenvolvimento do back-end, o lado do servidor que lida com requisições de API e manipulações no banco de dados, quanto do front-end, voltado ao desenvolvimento da interface web. 
+
+<a href="#" target="_blank"><img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js"></a>
+<a href="#" target="_blank"><img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React"></a>
+<a href="#" target="_blank"><img src="https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite"></a>
+
+## Funcionalidades
+
+## Banco de dados
+
+```mermaid
+erDiagram
+    USERS ||--o{ TASKS : has
+    USERS ||--o{ NOTES : has
+    
+    USERS {
+        int id PK
+        varchar username
+        varchar email
+        varchar password
+        timestamp created_at
+    }
+    
+    TASKS {
+        int id PK
+        int user_id FK
+        varchar name
+        varchar description
+        date deadline
+        enum urgency
+        enum status
+        timestamp created_at
+    }
+    
+    NOTES {
+        int id PK
+        int user_id FK
+        varchar content
+        timestamp created_at
+    }
+```
+
+## 🔴 Pré-requisitos
+Para rodar o projeto Hanagr 18 localmente, você precisará ter os seguintes itens instalados em sua máquina:
+
+1. Node.js
+
+    Versão: 14.x ou superior (recomendado: 18.x LTS)
+
+    Como verificar: `node --version`
+
+    Download: [nodejs.org](https://nodejs.org/pt-br)
+
+2. npm (Node Package Manager)
+
+    Geralmente instalado junto com o Node.js
+
+    Como verificar: `npm --version`
+
+    Versão mínima: 6.x
+
+4. SQLite3
+
+    versão 8 instalada e rodando
+
+    Como verificar: `mysql --version`
+
+    Crie um usuário 
+
+
+## Back-end
+O back-end da aplicação, desenvolvido em Node.js, cria automaticamente o banco de dados e as tabelas necessárias na primeira execução. Para colocar o servidor em produção, é necessário seguir algumas etapas prévias:
+
+1. Crie um arquivo ```.env``` na raiz do diretório com as seguintes variáveis:
+    ```
+    JWT_SECRET=sua_chave_secreta_para_access_token
+    JWT_REFRESH_SECRET=sua_chave_secreta_para_refresh_token
+    DB_USERNAME=<seu_usuario_sql>
+    DB_PASSWORD=<sua_senha_sql>
+    ```
+
+2. Instale as dependências do projeto:
+    ```
+    npm install
+    ```
+
+3. Inicie o servidor:
+    ```
+    npm run start
+    ```
+
+## 👨‍💻 Desenvolvedor
+Responsável pela criação do projeto
+
+Diego - Programação e documentação <br>
+Email: diego.dpab@gmail.com <br>
+Conheça mais acessando o GitHub do desenvolvedor [aqui](https://github.com/Di3go07)!
