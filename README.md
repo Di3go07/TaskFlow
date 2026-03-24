@@ -23,7 +23,11 @@ A aplicação oferece uma interface gráfica intuitiva para o ciclo completo de 
 
 🗑️ Exclusão controlada de tarefas
 
-Todas as tarefas são armazenados e gerenciados diretamente no servidor do projeto. Essas funcionalidades também se aplicam para o sistema de usuários e notas
+🌐 Rotas de API protegidas e conetadas ao servidor 
+
+🔒 Criptografia das senhas 
+
+Todas as tarefas são armazenados e gerenciados diretamente no servidor do projeto. As funcionalidades do CRUD também se aplicam para o sistema de usuários e notas
 
 ## 💾 Banco de dados
 
