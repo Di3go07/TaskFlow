@@ -23,6 +23,8 @@ A aplicação oferece uma interface gráfica intuitiva para o ciclo completo de 
 
 🗑️ Exclusão controlada de tarefas
 
+🔑 Sistema de proteção de rotas com middleware
+
 🔒 Criptografia das senhas 
 
 Todas as tarefas são armazenados e gerenciados diretamente no servidor do projeto. As funcionalidades do CRUD também se aplicam para o sistema de usuários e notas
