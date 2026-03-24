@@ -64,7 +64,7 @@ erDiagram
 ## API
 Conheça as rotas de API do projeto
 
-### Tarefas
+**Tarefas**
 | Metodo | Rota | Descricao | Autenticacao |
 |--------|------|-----------|--------------|
 | GET | /tasks | Lista todas as tarefas de um usuario | Sim |
@@ -73,7 +73,7 @@ Conheça as rotas de API do projeto
 | PUT | /tasks/editar/:id | Edita as informacoes de uma tarefa | Sim |
 | DELETE | /tasks/:id | Deleta uma tarefa | Sim |
 
-### Usuarios
+**Usuarios**
 
 | Metodo | Rota | Descricao | Autenticacao |
 |--------|------|-----------|--------------|
@@ -82,6 +82,8 @@ Conheça as rotas de API do projeto
 | POST | /auth/login | Realiza o login de um usuario | Nao |
 | PUT | /auth/edit | Edita os dados do usuario conectado atualmente | Sim |
 | DELETE | /auth/delete | Deleta o usuario conectado atualmente | Sim |
+
+Para as rotas que necessitam de autenticação, o próprio projeto lida com o envio do token do usuário após ele ter realizado o login.
 
 ## 🔴 Pré-requisitos
 Para rodar o projeto TaskFlow localmente, você precisará ter os seguintes itens instalados em sua máquina:
