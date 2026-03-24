@@ -61,7 +61,7 @@ erDiagram
     }
 ```
 
-## API
+## 🌐 API
 Conheça as rotas de API do projeto
 
 **Tarefas**
