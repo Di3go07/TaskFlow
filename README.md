@@ -1,7 +1,9 @@
 # 📑 TaskFlow
 
 ## 📌 Apresentação 
-Desenvolvido para simplificar a rotina do usuário, o projeto TaskFlow oferece uma solução completa para organização de tarefas, permitindo o acompanhamento de prazos e status de forma prática e eficiente. Com foco na experiência do usuário (UX), a interface foi projetada para ser intuitiva, visualmente agradável e adaptável a diferentes dispositivos, garantindo acessibilidade e conforto em qualquer contexto. 
+Desenvolvido para simplificar a rotina do usuário, o projeto TaskFlow oferece uma solução completa para organização de tarefas, permitindo o acompanhamento de prazos e status de forma prática e eficiente. 
+
+Com foco na experiência do usuário (UX), a interface foi projetada para ser intuitiva, visualmente agradável e adaptável a diferentes dispositivos, garantindo acessibilidade e conforto em qualquer contexto. 
 
 O site foi desenvolvido de forma Full-Stack. Isto é, a aplicação entrega tanto o desenvolvimento do back-end, o lado do servidor que lida com requisições de API e manipulações no banco de dados, quanto do front-end, voltado ao desenvolvimento da interface web. 
 
@@ -58,7 +60,7 @@ erDiagram
 ```
 
 ## 🔴 Pré-requisitos
-Para rodar o projeto Hanagr 18 localmente, você precisará ter os seguintes itens instalados em sua máquina:
+Para rodar o projeto TaskFlow localmente, você precisará ter os seguintes itens instalados em sua máquina:
 
 1. Node.js
 

@@ -1,17 +1,30 @@
 import express from 'express';
 import { readTasks, readTask, createTask, updateTask, deleteTask } from '../database/querys/manipulateTasks.js'
+import { getUserData } from '../database/querys/manipulateUsers.js'
 import { authJwt } from '../middleware/authJwt.js'
 
 const router = express.Router();
 
-// GET "/tasks" - Lista todas as tarefas 
-router.get('/', authJwt, function (req, res) {
-   readTasks()
+// GET "/tasks" - Lista todas as tarefas de um usuário
+router.get('/', authJwt, async function (req, res) {
+   
+   //busca o id do usuário
+   const userToken = req.headers['authorization'].split(' ')[1];
+   const data = await getUserData(userToken);
+   const id = data.id //armazena qual o id do usuário
+
+   readTasks(id)
       .then(result => {
-         res.status(200).json({ 
-            mensagem: "Lista de tasks retornadas com sucesso!",
-            task: result 
-         });
+         if (result.length === 0) {
+            res.status(200).json({ 
+               mensagem: `O usuário ${data.username} não tem nenhuma tarefa`,
+            });
+         } else {
+            res.status(200).json({ 
+               mensagem: "Lista de tasks do usuário retornadas com sucesso!",
+               task: result 
+            });
+         }
       })
       .catch(error => {
          console.error("Erro ao resgatar task:", error);
@@ -23,10 +36,15 @@ router.get('/', authJwt, function (req, res) {
 })
  
 // GET "/tasks/:id" - Filtra uma tarefa específica
-router.get('/:id', authJwt, function (req, res) {
+router.get('/:id', authJwt, async function (req, res) {
    const taskId = req.params.id;
+   
+   //busca o id do usuário
+   const userToken = req.headers['authorization'].split(' ')[1];
+   const data = await getUserData(userToken);
+   const userId = data.id //armazena qual o id do usuário
 
-   readTask(taskId)
+   readTask(taskId, userId)
       .then(result => {
          if (result.length === 0) {
             res.status(404).json({ 
@@ -41,19 +59,28 @@ router.get('/:id', authJwt, function (req, res) {
       })
       .catch(error => {
          console.error("Erro ao resgatar task:", error);
-         res.status(500).json({ 
-            error: "Erro ao resgatar a tarefa",
-            detalhe: error.message 
-         });
+         if (error.status === 403) {
+            res.status(403).json({ error: error.error });
+         } else {
+            res.status(500).json({ 
+               error: "Erro ao resgatar a tarefa",
+               detalhe: error.message 
+            })
+         }
       });
 })
 
 // POST "tasks/create" - Adiciona uma nova tarefa
-router.post('/create', authJwt, function(req, res) {
+router.post('/create', authJwt, async function(req, res) {
+
+   //busca o id do usuário que esta criando a tarefa
+   const userToken = req.headers['authorization'].split(' ')[1];
+   const data = await getUserData(userToken);
+   const userId = data.id //armazena qual o id do usuário
 
    //Objeto da nova tarefa com os dados passados
    const newTask = {
-      user_id: req.body.user_id,
+      user_id: userId,
       name: req.body.name,
       description: req.body.description,
       deadline: req.body.deadline,
@@ -104,10 +131,15 @@ router.post('/create', authJwt, function(req, res) {
 })
 
 // DELETE "tasks/:id" - Deleta uma tarefa 
-router.delete('/:id', authJwt, function(req, res) {
+router.delete('/:id', authJwt, async function(req, res) {
    const taskId = req.params.id;
 
-   deleteTask(taskId) 
+   //busca o id do usuário
+   const userToken = req.headers['authorization'].split(' ')[1];
+   const data = await getUserData(userToken);
+   const userId = data.id //armazena qual o id do usuário
+
+   deleteTask(taskId, userId) 
       .then(result => {
          if (result.affectedRows === 0) {
             res.status(404).json({
@@ -121,16 +153,21 @@ router.delete('/:id', authJwt, function(req, res) {
          }
       })
       .catch(error => {
-         console.error("Erro ao criar task:", error);
-         res.status(500).json({ 
-            error: "Erro ao deletar a tarefa",
-            detalhe: error.message 
-         });
+         console.error("Erro ao deletar task:", error);
+         if (error.status === 403) {
+            res.status(403).json({ error: error.error });
+         } else {
+            res.status(500).json({ 
+               error: "Erro ao deletar a tarefa",
+               detalhe: error.message 
+            })
+         }
       });
-})
+});
+
 
 // PUT "tasks/editar/:id" - Edita as informações de uma tarefa 
-router.put('/editar/:id', authJwt, function(req, res) {
+router.put('/editar/:id', authJwt, async function(req, res) {
    const id = req.params.id
    const newTask = {
       user_id: req.body.user_id || null,
@@ -141,7 +178,12 @@ router.put('/editar/:id', authJwt, function(req, res) {
       status: req.body.status || null,
    };
 
-   updateTask(id, newTask)
+   //busca o id do usuário
+   const userToken = req.headers['authorization'].split(' ')[1];
+   const data = await getUserData(userToken);
+   const userId = data.id //armazena qual o id do usuário
+
+   updateTask(id, newTask, userId)
    .then(result => {
       if (result.affectedRows === 0) {
          res.status(404).json({
@@ -155,11 +197,15 @@ router.put('/editar/:id', authJwt, function(req, res) {
       }
    })
    .catch(error => {
-      console.error("Erro ao criar task:", error);
-      res.status(500).json({ 
-         error: "Erro ao atualizar a tarefa",
-         detalhe: error.message 
-      });
+      console.error("Erro ao editar task:", error);
+      if (error.status === 403) {
+         res.status(403).json({ error: error.error });
+      } else {
+         res.status(500).json({ 
+            error: "Erro ao editar a tarefa",
+            detalhe: error.message 
+         })
+      }
    });
 })
 
