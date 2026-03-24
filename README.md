@@ -85,7 +85,7 @@ Conheça as rotas de API do projeto
 
 Para as rotas que necessitam de autenticação, o próprio projeto lida com o envio do token do usuário após ele ter realizado o login.
 
-Além disso, o sistema não permite visualizar, editar ou deletar tarefas de outros usuários
+Além disso, o sistema não permite visualizar, editar ou deletar tarefas de outros usuários.
 
 ## 🔴 Pré-requisitos
 Para rodar o projeto TaskFlow localmente, você precisará ter os seguintes itens instalados em sua máquina:
