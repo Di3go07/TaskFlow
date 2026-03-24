@@ -73,7 +73,7 @@ Conheça as rotas de API do projeto
 | PUT | /tasks/editar/:id | Edita as informacoes de uma tarefa | Sim |
 | DELETE | /tasks/:id | Deleta uma tarefa | Sim |
 
-**Usuarios**
+**Usuários**
 
 | Metodo | Rota | Descricao | Autenticacao |
 |--------|------|-----------|--------------|
