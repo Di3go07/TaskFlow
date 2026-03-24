@@ -61,6 +61,28 @@ erDiagram
     }
 ```
 
+## API
+Conheça as rotas de API do projeto
+
+### Tarefas
+| Metodo | Rota | Descricao | Autenticacao |
+|--------|------|-----------|--------------|
+| GET | /tasks | Lista todas as tarefas de um usuario | Sim |
+| GET | /tasks/:id | Filtra uma tarefa especifica | Sim |
+| POST | /tasks/create | Adiciona uma nova tarefa | Sim |
+| PUT | /tasks/editar/:id | Edita as informacoes de uma tarefa | Sim |
+| DELETE | /tasks/:id | Deleta uma tarefa | Sim |
+
+### Usuarios
+
+| Metodo | Rota | Descricao | Autenticacao |
+|--------|------|-----------|--------------|
+| GET | /auth/me | Retorna os dados do usuario conectado atualmente | Sim |
+| POST | /auth/register | Registra um novo usuario no banco | Nao |
+| POST | /auth/login | Realiza o login de um usuario | Nao |
+| PUT | /auth/edit | Edita os dados do usuario conectado atualmente | Sim |
+| DELETE | /auth/delete | Deleta o usuario conectado atualmente | Sim |
+
 ## 🔴 Pré-requisitos
 Para rodar o projeto TaskFlow localmente, você precisará ter os seguintes itens instalados em sua máquina:
 
