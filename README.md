@@ -108,6 +108,9 @@ O back-end da aplicação, desenvolvido em Node.js, cria automaticamente o banco
     npm run start
     ```
 
+## 🖥️ Front-end
+O front-end da aplicação foi construido usando o framework React
+
 ## 👨‍💻 Desenvolvedor
 Responsável pela criação do projeto
 
