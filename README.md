@@ -23,7 +23,11 @@ A aplicação oferece uma interface gráfica intuitiva para o ciclo completo de 
 
 🗑️ Exclusão controlada de tarefas
 
-Todas as tarefas são armazenados e gerenciados diretamente no servidor do projeto. Essas funcionalidades também se aplicam para o sistema de usuários e notas
+🔑 Sistema de proteção de rotas com middleware
+
+🔒 Criptografia das senhas 
+
+Todas as tarefas são armazenados e gerenciados diretamente no servidor do projeto. As funcionalidades do CRUD também se aplicam para o sistema de usuários e notas
 
 ## 💾 Banco de dados
 
@@ -59,6 +63,33 @@ erDiagram
     }
 ```
 
+## 🌐 API
+Conheça as rotas de API do projeto
+
+**Tarefas**
+| Metodo | Rota | Descricao | Autenticacao |
+|--------|------|-----------|--------------|
+| GET | /tasks | Lista todas as tarefas de um usuario | Sim |
+| GET | /tasks/:id | Filtra uma tarefa especifica | Sim |
+| POST | /tasks/create | Adiciona uma nova tarefa | Sim |
+| PUT | /tasks/editar/:id | Edita as informacoes de uma tarefa | Sim |
+| DELETE | /tasks/:id | Deleta uma tarefa | Sim |
+
+**Usuários**
+
+| Metodo | Rota | Descricao | Autenticacao |
+|--------|------|-----------|--------------|
+| GET | /auth/me | Retorna os dados do usuario conectado atualmente | Sim |
+| POST | /auth/register | Registra um novo usuario no banco | Nao |
+| POST | /auth/login | Realiza o login de um usuario | Nao |
+| PUT | /auth/edit | Edita os dados do usuario conectado atualmente | Sim |
+| DELETE | /auth/delete | Deleta o usuario conectado atualmente | Sim |
+
+Para as rotas que necessitam de autenticação, o próprio projeto lida com o envio do token do usuário após ele ter realizado o login.
+
+Além disso, o sistema não permite visualizar, editar ou deletar tarefas de outros usuários.
+
+
 ## 🔴 Pré-requisitos
 Para rodar o projeto TaskFlow localmente, você precisará ter os seguintes itens instalados em sua máquina:
 
@@ -90,7 +121,12 @@ Para rodar o projeto TaskFlow localmente, você precisará ter os seguintes iten
 ## 🗄️ Back-end
 O back-end da aplicação, desenvolvido em Node.js, cria automaticamente o banco de dados e as tabelas necessárias na primeira execução. Para colocar o servidor em produção, é necessário seguir algumas etapas prévias:
 
-1. Crie um arquivo ```.env``` na raiz do diretório com as seguintes variáveis:
+1. Navegue para o diretório raiz do projeto:
+    ```
+    cd /TaskFlow
+    ```
+
+2. Crie um arquivo ```.env``` na raiz do diretório com as seguintes variáveis:
     ```
     JWT_SECRET=sua_chave_secreta_para_access_token
     JWT_REFRESH_SECRET=sua_chave_secreta_para_refresh_token
@@ -98,15 +134,35 @@ O back-end da aplicação, desenvolvido em Node.js, cria automaticamente o banco
     DB_PASSWORD=<sua_senha_sql>
     ```
 
+3. Instale as dependências do projeto:
+    ```
+    npm install
+    ```
+
+4. Inicie o servidor:
+    ```
+    npm run start
+    ```
+
+## 🖥️ Front-end
+O front-end da aplicação foi construido usando o framework React. Após as etapas anteriores de inicializar o servidor da aplicação, siga esses passos para rodar a interface gráfica do TaskFlow: 
+
+1. Em outra aba do terminal, ainda a partir do diretório raiz do projeto, navegue até o frontend:
+    ```
+    cd ./src/frontend
+    ``` 
+
 2. Instale as dependências do projeto:
     ```
     npm install
     ```
 
-3. Inicie o servidor:
+3. Inicialize o site:
     ```
-    npm run start
+    npm run dev
     ```
+
+O terminal irá exibir uma url, basta acessa-la para abrir a página web da aplicação. Agora, sinta-se livre para conhecer o site e testar todas as funcionalidades dele. 
 
 ## 👨‍💻 Desenvolvedor
 Responsável pela criação do projeto
