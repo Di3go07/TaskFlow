@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
 
@@ -6,7 +7,9 @@ function Login() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [icon, setIcon] = useState("fa-eye");
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
+
+  const navigate = useNavigate();
 
   function handleShowPassword(){
     setShowPassword(!showPassword);
@@ -37,7 +40,7 @@ function Login() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(user)
-      });
+      }); 
 
       const data = await response.json(); 
       if (data.error){
@@ -46,6 +49,7 @@ function Login() {
         const token = data.accessToken
         console.log(token)
         localStorage.setItem('authorization', `Bearer ${token}`);
+        navigate('/') //direciona o usuário para home após o login
       }
 
     } catch (error) {

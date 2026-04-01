@@ -1,0 +1,118 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Task from '../components/Task';
+
+function Home(){
+    const navigate = useNavigate();
+    const auth = localStorage.getItem('authorization');
+    const [token, setToken] = useState("");
+    const [user, setUser] = useState("");
+    const [tasks, setTasks] = useState([]);
+
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    async function getUserData(token){
+        /* 
+        getUserData(token) recebe como parâmetro o token do usuário resgatado no localStorage. 
+        A partir dele, a função faz um request ao servidor pedindo seus dados.
+        A resposta é fornecida em JSON e os dados são usados para criar um objeto do usuário.
+        */
+        try {
+            const response = await fetch('api/auth/me', {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+            });
+
+            const data = await response.json();
+            return data
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+        }
+    }
+
+    async function getUserTasks(token) {
+        /*
+        getUserTasks(token) recebe o token como parâmetro para validar a requisição da API. 
+        Seu request busca todas as tarefas do banco que armazanem o id do usuário cadastrado no campo "user_id". 
+        O retorno é uma lista de objetos das tarefas e é armazenado na variável "tasks".
+        */
+        try {
+            const response = await fetch('api/tasks', {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+            });
+
+            const data = await response.json();
+            return data
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+        }
+    } 
+
+    useEffect( () => {
+        if (!auth){
+            navigate('/login')
+        } else {
+            setToken(auth.split(" ")[1]);
+        }
+
+        const fetchUserData = async () => {
+            const userToken = auth.split(" ")[1];
+            const data = await getUserData(userToken);
+            if (data) {
+              if(data.message !== "Dados do usuário retornados com sucessos"){ 
+               navigate("/login") //caso não retorne os dados do usuário, força o usuário à refazer o seu login
+              } else {
+                setUser(data.user)
+              }
+            }
+        };
+
+        const fetchUserTasks = async () => {
+            const userToken = auth.split(" ")[1];
+            const data = await getUserTasks(userToken);
+            if (data){
+                if(data.mensagem !== "Lista de tasks do usuário retornadas com sucesso!"){ 
+                    setError({status: 404, message: data.mensagem});
+                } else {
+                    setTasks(data.task)
+                    console.log(data.task)
+                }
+            }
+        };
+
+        fetchUserData()
+        fetchUserTasks()
+
+        setLoading(false); //retira a tela de loading quando carrega tudo do banco de dados
+    }, []);
+
+
+    if (loading) {
+        return <h3>Carregando...</h3>;
+    }
+    if(error){
+        return <div>
+            <h3> Error {error.status} </h3>
+            <p> {error.message} </p>
+        </div>
+    }
+
+    return(
+        <div>
+            <h1> Bem vindo {user.username} </h1>
+            <div className='Tasks'>
+                {tasks.map(task => <Task name={task.name} description={task.description} urgency={task.urgency} deadline={task.deadline}/>)}
+            </div>
+        </div>
+    )
+}
+
+export default Home;
