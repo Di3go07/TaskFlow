@@ -11,6 +11,7 @@ function Home(){
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [mensagem, setMensagem] = useState("");
 
     async function getUserData(token){
         /* 
@@ -71,17 +72,23 @@ function Home(){
                navigate("/login") //caso não retorne os dados do usuário, força o usuário à refazer o seu login
               } else {
                 setUser(data.user)
+                return data.user;
               }
             }
         };
 
         const fetchUserTasks = async () => {
             const userToken = auth.split(" ")[1];
+            const user = await fetchUserData();
             const data = await getUserTasks(userToken);
             if (data){
-                if(data.mensagem !== "Lista de tasks do usuário retornadas com sucesso!"){ 
+                if (data.mensagem === `O usuário ${user.username} não tem nenhuma tarefa`){ 
+                    setMensagem(<p> Você ainda não tem nenhuma task cadastrada, crie uma <a href="/tasks/create">aqui!</a> </p>);
+                } else if (data.mensagem !== "Lista de tasks do usuário retornadas com sucesso!") {
+                    console.log(data.mensagem);
                     setError({status: 404, message: data.mensagem});
-                } else {
+                } 
+                else {
                     setTasks(data.task)
                     console.log(data.task)
                 }
@@ -109,8 +116,9 @@ function Home(){
         <div>
             <h1> Bem vindo {user.username} </h1>
             <div className='Tasks'>
-                {tasks.map(task => <Task name={task.name} description={task.description} urgency={task.urgency} deadline={task.deadline}/>)}
+                {tasks.map(task => <Task name={task.name} description={task.description} urgency={task.urgency} deadline={task.deadline} id={task.id}/>)}
             </div>
+            {mensagem}
         </div>
     )
 }

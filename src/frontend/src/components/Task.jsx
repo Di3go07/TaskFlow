@@ -19,6 +19,7 @@ function Task(props){
             <p style={{margin:'0'}}>{props.description}</p>
             <p style={urgencyStyle[props.urgency]}>{props.urgency}</p>
             <p>{dataFormatada}</p>
+            <a href={`/tasks/edit/${props.id}`}><i className="fa-solid fa-pencil"></i></a>
         </div>
     )
 }

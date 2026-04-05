@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 function CreateTask() {
     const auth = localStorage.getItem('authorization');
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true)
     const [token, setToken] = useState("");
 
@@ -10,6 +11,7 @@ function CreateTask() {
     const [description, setDescription] = useState("");
     const [deadline, setDeadline] = useState("");
     const [urgency, setUrgency] = useState("baixa");
+
     const [error, setError] = useState(false)
     const [message, setMessage] = useState("")
 
@@ -38,6 +40,10 @@ function CreateTask() {
                 }else{
                     setMessage(data.mensagem);
                     console.log(data.task);
+                    setDeadline("");
+                    setName("");
+                    setDescription("");
+                    setUrgency("baixa");
                 }
             } catch (error) {
                 console.error('Erro na requisição:', error);
