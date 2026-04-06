@@ -1,6 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import Header from "../components/Header";
+import { Box, ThemeProvider, Typography, TextField, MenuItem, Button } from '@mui/material';
+import theme from "../theme/theme";
 
 function EditTask() {
     const taskId = useParams().id;
@@ -9,7 +12,13 @@ function EditTask() {
     const [loading, setLoading] = useState(true)
     const [token, setToken] = useState("");
     
-    const [task, setTask] = useState("");
+    const [task, setTask] = useState({
+        name: '',
+        description: '',
+        deadline: '',
+        status: 'pendente',
+        urgency: 'alta',
+      });
 
     const [message, setMessage] = useState("");
     const [error, setError] = useState(false);
@@ -62,7 +71,8 @@ function EditTask() {
 
             const data = await response.json();
             if (data.error){
-                setError(data.error)
+                setError(true)
+                setMessage(data.error)
             }else{
                 setMessage(data.mensagem);
                 console.log(data.task);
@@ -76,39 +86,60 @@ function EditTask() {
     if (loading){ return (<div><p>Carregando...</p></div>)}
 
     return (
-        <div>
-            <h1>Edit Task</h1>
+        <ThemeProvider theme={theme}>
+            <Box sx={{margin:'0 128px 42px 128px'}}>
+                <Header/>
 
-            <div className="forms" style={{display:'flex', flexDirection:'column', maxWidth:'250px'}}>
-                <label htmlFor="title">Title</label>
-                <input type="text" maxLength={50} id="title" value={task.name} onChange={(e) => setTask(t => ({...t, name:e.target.value}))}/>
+                <Box
+                    sx={{
+                    display:"flex",
+                    flexDirection:'column',
+                    bgcolor: 'background.body',
+                    boxShadow: 1,
+                    borderRadius: 5,
+                    padding: 5,
+                    minWidth: 300,
+                    }}
+                >
 
-                <label htmlFor="description">Description</label>
-                <textarea id="description" maxLength={80} value={task.description} onChange={(e) => setTask(t => ({...t, description:e.target.value}))} />
+                    <Typography variant="h2" component="h2">Edit Task</Typography>
 
-                <label htmlFor="deadline">Deadline</label>
-                <input  type='date' id="deadline" value={task.deadline} onChange={(e) =>  setTask(t => ({...t, deadline:e.target.value}))}/>
+                    <Box> 
+                        <Box sx={{ width: {xs: 250, sm: 300, md: 550}, padding:'24px 0'}}>
+                            <TextField label='Title' type="text" maxLength={50} id="title" value={task.name} onChange={(e) => setTask(t => ({...t, name:e.target.value}))}/>
+                            <TextField multiline label='Description' id="description" maxLength={80} value={task.description} onChange={(e) => setTask(t => ({...t, description:e.target.value}))} />
+                            <TextField type='date' id="deadline" value={task.deadline} onChange={(e) =>  setTask(t => ({...t, deadline:e.target.value}))} />
+                            <TextField
+                                label="Urgency"
+                                select
+                                value={task.urgency}  
+                                onChange={(e) => setTask(t => ({ ...t, urgency: e.target.value }))}
+                                >
+                                <MenuItem value="alta">Alta</MenuItem>
+                                <MenuItem value="media">Média</MenuItem>
+                                <MenuItem value="baixa">Baixa</MenuItem>
+                            </TextField>
+                            <TextField
+                                label="Status"
+                                select                  
+                                value={task.status}
+                                onChange={(e) =>
+                                    setTask(t => ({ ...t, status: e.target.value }))
+                                }
+                            >
+                                <MenuItem value="pendente">Pendente</MenuItem>
+                                <MenuItem value="andamento">Em andamento</MenuItem>
+                                <MenuItem value="concluida">Concluída</MenuItem>
+                                <MenuItem value="abandonada">Abandonada</MenuItem>
+                            </TextField>
 
-                <label htmlFor="urgency">Urgency</label>
-                <select id="urgency" value={task.urgency} onChange={(e) =>  setTask(t => ({...t, urgency:e.target.value}))}>
-                    <option value="alta">Alta</option>
-                    <option value="media">Média</option>
-                    <option value="baixa">Baixa</option>
-                </select>
-
-                <label htmlFor="status">Status</label>
-                <select id="status" value={task.status} onChange={(e) =>  setTask(t => ({...t, status:e.target.value}))}>
-                    <option value="pendente">Pendente</option>
-                    <option value="andamento">Em andamento</option>
-                    <option value="concluida">Concluida</option>
-                    <option value="abandonada">Abandonada</option>
-                </select>
-
-                <button style={{marginTop:'24px'}} onClick={handleEditTask}> Editar </button>
-            </div>
-
-            <p style={{ color: error ? 'red' : undefined }}>{message}</p>
-        </div>
+                            <Button variant="primary" onClick={handleEditTask} style={{margin:'24px 0 42px 0'}}> Editar </Button>
+                            <Typography variant={error ? "error" : "sucess"}>{message}</Typography>
+                        </Box>
+                    </Box>
+                </Box>
+            </Box>
+        </ThemeProvider>
     )
 }
 

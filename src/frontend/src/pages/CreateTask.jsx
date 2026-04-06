@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import Header from "../components/Header";
+import { Box, ThemeProvider, Typography, TextField, MenuItem, Button } from '@mui/material';
+import theme from "../theme/theme";
+
 
 function CreateTask() {
     const auth = localStorage.getItem('authorization');
@@ -9,11 +13,20 @@ function CreateTask() {
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [deadline, setDeadline] = useState("");
+    const [deadline, setDeadline] = useState(dataAtual());
     const [urgency, setUrgency] = useState("baixa");
 
     const [error, setError] = useState(false)
     const [message, setMessage] = useState("")
+
+    function dataAtual(){
+        const date = new Date();
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+
+        return `${year}-${month}-${day}`;
+    }
 
     async function handleCreateTask(){
         if (name !== "" && description !== "" && deadline !== ""){
@@ -69,30 +82,42 @@ function CreateTask() {
         return <h3>Carregando...</h3>;
     }
     return(
-        <div>
-            <h1> Create Task </h1>
+        <ThemeProvider theme={theme}>
+            <Box sx={{margin:'0 128px 42px 128px'}}>
+                <Header/>
 
-            <div className="forms" style={{display:'flex', flexDirection:'column', maxWidth:'250px'}}>
-                <label htmlFor="title">Title</label>
-                <input type="text" maxLength={50} id="title" value={name} onChange={(e) => setName(e.target.value)}/>
+                <Box
+                    sx={{
+                    display:"flex",
+                    flexDirection:'column',
+                    bgcolor: 'background.body',
+                    boxShadow: 1,
+                    borderRadius: 5,
+                    padding: 5,
+                    minWidth: 300,
+                    }}
+                >
+                    <Typography variant="h2" component="h2">Creat Task</Typography>
 
-                <label htmlFor="description">Description</label>
-                <textarea id="description" maxLength={80} value={description} onChange={(e) => setDescription(e.target.value)} />
+                    <Box> 
+                        <Box sx={{ width: {xs: 250, sm: 300, md: 550}}}>
 
-                <label htmlFor="deadline">Deadline</label>
-                <input  type='date' id="deadline" value={deadline} onChange={(e) => setDeadline(e.target.value)}/>
+                        <TextField label='Title' type="text" maxLength={50} id="title" value={name} onChange={(e) => setName(e.target.value)}/>
+                        <TextField multiline label='Description' id="description" maxLength={80} value={description} onChange={(e) => setDescription(e.target.value)} />
+                        <TextField  type='date' label='Deadline' id="deadline" value={deadline} onChange={(e) => setDeadline(e.target.value)}/>
+                        <TextField select label='urgency' id="urgency" value={urgency} onChange={(e) => setUrgency(e.target.value)}>
+                            <MenuItem value="alta">Alta</MenuItem>
+                            <MenuItem value="media">Média</MenuItem>
+                            <MenuItem value="baixa">Baixa</MenuItem>
+                        </TextField>
 
-                <label htmlFor="urgency">Urgency</label>
-                <select id="urgency" value={urgency} onChange={(e) => setUrgency(e.target.value)}>
-                    <option value="alta">Alta</option>
-                    <option value="media">Média</option>
-                    <option value="baixa">Baixa</option>
-                </select>
-
-                <button style={{marginTop:'24px'}} onClick={handleCreateTask}> Salvar </button>
-            </div>
-            <p  style={{ color: error ? 'red' : undefined }} > {message} </p>
-        </div>
+                            <Button variant="primary" onClick={handleCreateTask} style={{margin:'24px 0 42px 0'}}> Salvar </Button>
+                            <Typography variant={error ? "error" : "sucess"}>{message}</Typography>
+                        </Box>
+                    </Box>
+                </Box>
+            </Box>
+        </ThemeProvider>
     );
 }
 

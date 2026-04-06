@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { Box, ThemeProvider, Typography, TextField, Button } from '@mui/material';
+import theme from "../theme/theme";
 
 function Login() {
 
@@ -60,22 +62,73 @@ function Login() {
   }
 
   return (
-    <div>
-      <h1>Login</h1>
+    <ThemeProvider theme={theme}>
+      <Box sx={{
+        display:"flex",
+        flexDirection:'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        <Typography variant="h1" component="h1"> Task<span style={{ color:'#B23A3A'}}>Flow</span> </Typography>
+          
+          <Box
+            sx={{
+              display:"flex",
+              flexDirection:'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              bgcolor: 'background.body',
+              boxShadow: 1,
+              borderRadius: 5,
+              padding: 5,
+              minWidth: 300,
+            }}
+          >
+                <Typography variant="h2" component="h2">Login</Typography>
+                <Typography variant="error">{message}</Typography>
 
-      <div>
-        <label htmlFor='email'> Email </label>
-        <input type='email' id='email' value={email} onChange={(e) => setEmail(e.target.value)}/>
-        <div>
-          <label htmlFor='paswword'> Password </label>
-          <input type={showPassword ? "text" : "password"} id='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
-          <i className={`fa-regular ${icon}`} onClick={() => handleShowPassword()}></i> 
-        </div>
 
-        <button onClick={() => handleLogin()}> Login </button>
-        <p>{message}</p>
-      </div>
-    </div>
+                <div style={{marginTop:24}}> 
+                  <Box sx={{ width: {xs: 250, sm: 300, md: 350} }}>
+                    <TextField
+                      label="email"
+                      type="email"
+                      fullWidth
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+
+                    <Box sx={{ position: 'relative'}}>
+                      <TextField
+                        label="password"
+                        type={showPassword ? "text" : "password"}
+                        fullWidth
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
+
+                      <Box
+                        onClick={handleShowPassword}
+                        sx={{
+                          position: 'absolute',
+                          right: -25,
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        <i className={`fa-regular ${icon}`} style={{marginBottom:'24px'}}></i>
+                      </Box>
+                    </Box>
+                  </Box>
+
+                  <Button variant="primary" onClick={() => handleLogin()} style={{margin:'24px 0 42px 0'}}> Login </Button>
+                </div>
+
+                <Typography variant="text" style={{marginBottom:42}}>Caso não tenha uma conta, <a href='/register'>registre-se</a></Typography>
+          </Box>
+      </Box>
+    </ThemeProvider>
   );
 }
 

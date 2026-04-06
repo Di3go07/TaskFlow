@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Task from '../components/Task';
+import { Collapse, Button, Box, Typography, ThemeProvider } from '@mui/material';
+import theme from '../theme/theme';
+import Header from '../components/Header';
 
 function Home(){
     const navigate = useNavigate();
@@ -42,7 +44,7 @@ function Home(){
         O retorno é uma lista de objetos das tarefas e é armazenado na variável "tasks".
         */
         try {
-            const response = await fetch('api/tasks', {
+            const response = await fetch('api/tasks/all', {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
@@ -113,14 +115,32 @@ function Home(){
     }
 
     return(
-        <div>
-            <h1> Bem vindo {user.username} </h1>
-            <div className='Tasks'>
-                {tasks.map(task => <Task name={task.name} description={task.description} urgency={task.urgency} deadline={task.deadline} id={task.id}/>)}
-            </div>
-            {mensagem}
-        </div>
-    )
+        <ThemeProvider theme={theme}>
+            <Box sx={{margin:'0 128px 42px 128px'}}>
+                <Header />
+
+                <Box
+                    sx={{
+                    display:"flex",
+                    flexDirection:'column',
+                    bgcolor: 'background.body',
+                    boxShadow: 1,
+                    borderRadius: 5,
+                    padding: 5,
+                    minWidth: 300,
+                    }}
+                >
+                    <Typography variant="h2" component="h2">Bem vindo, {user.username}</Typography>
+                </Box>
+            </Box>
+        </ThemeProvider>
+     )
 }
 
 export default Home;
+
+/* 
+            <div className='Tasks'>
+                {tasks.map(task => <Task name={task.name} description={task.description} urgency={task.urgency} deadline={task.deadline} id={task.id}/>)}
+            </div>
+*/
