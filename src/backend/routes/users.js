@@ -33,7 +33,13 @@ router.post('/register', async function(req,res) {
            error: "Nome de usuário deve ser informado e não ultrapassar o limite de 50 caracteres"
         });
     }
-    if (req.body.email.length > 255) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; //regex para validar o email
+    if (!regex.test(req.body.email)) {
+        return res.status(400).json({ 
+           error: "O email não é válido. Utilize o formato: nome@email.com"
+        });
+    }
+    if (req.body.email.length > 255 ) {
         return res.status(400).json({ 
            error: "O email ultrapassa o limite de 255 caracteres"
         });
@@ -41,6 +47,11 @@ router.post('/register', async function(req,res) {
     if (req.body.password.length > 50 || !req.body.password) {
         return res.status(400).json({ 
            error: "A senha deve ser informada e não pode ultrapassar o limite de 50 caracteres"
+        });
+    }
+    if (req.body.confirmPassword !== req.body.password) {
+        return res.status(400).json({ 
+           error: "As senhas não conferem"
         });
     }
 

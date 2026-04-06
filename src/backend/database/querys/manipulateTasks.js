@@ -30,24 +30,39 @@ async function createTable() {
     })
 }
 
+function formatedResult(result){
+    return result.map(task => ({
+        ...task,
+        deadline: result[0].deadline.toISOString().split("T")[0]
+    }));
+}
+
 // -- Manipulações no banco --
 
-export async function readTasks(id) {
+export async function readTasks(id, status) {
     /*
-    readTasks() essa função retorna todas as instâncias de tarefas armazenadas no banco 
+    readTasks() essa função retorna todas as instâncias de tarefas do usuário armazenadas no banco com o status passado 
     */
     const con = await db; //inicializa o banco
     await createTable() //verifica se a tabela esta criada
 
+    if (status){
+        const query = 'SELECT * FROM tasks WHERE user_id = ? AND status = ?' 
 
+        return new Promise((resolve, reject) => { //promise  com a resposta
+            con.query(query, [id, status], (err, result) => { //função que realiza a busca em segundo plano da aplicação
+             err ? reject(err) : resolve(result);
+            }) 
+        });
+    } else {
+        const query = 'SELECT * FROM tasks WHERE user_id = ?'
 
-    const query = 'SELECT * FROM tasks WHERE user_id = ?' //query de busca
-
-    return new Promise((resolve, reject) => { //promise  com a resposta
-       con.query(query, [id], (err, result) => { //função que realiza a busca em segundo plano da aplicação
-        err ? reject(err) : resolve(result);
-       }) 
-    });
+        return new Promise((resolve, reject) => { //promise  com a resposta
+            con.query(query, [id], (err, result) => { //função que realiza a busca em segundo plano da aplicação
+             err ? reject(err) : resolve(result);
+            }) 
+        });
+    }
 }
 
 export async function readTask(id, userId) {
@@ -72,7 +87,7 @@ export async function readTask(id, userId) {
 
         return new Promise((resolve, reject) => {
             con.query(query, [id], (err, result) => {
-                err ? reject(err) : resolve(result);
+                err ? reject(err) : resolve(formatedResult(result));
             })
         })
     } else {

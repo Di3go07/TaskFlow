@@ -5,8 +5,8 @@ import { authJwt } from '../middleware/authJwt.js'
 
 const router = express.Router();
 
-// GET "/tasks" - Lista todas as tarefas de um usuário
-router.get('/', authJwt, async function (req, res) {
+// GET "/tasks/all" - Retorna todas as tasks de um usuário
+router.get('/all', authJwt, async function (req, res) {
    
    //busca o id do usuário
    const userToken = req.headers['authorization'].split(' ')[1];
@@ -18,6 +18,46 @@ router.get('/', authJwt, async function (req, res) {
          if (result.length === 0) {
             res.status(200).json({ 
                mensagem: `O usuário ${data.username} não tem nenhuma tarefa`,
+            });
+         } else {
+            res.status(200).json({ 
+               mensagem: "Lista de tasks do usuário retornadas com sucesso!",
+               task: result 
+            });
+         }
+      })
+      .catch(error => {
+         console.error("Erro ao resgatar task:", error);
+         res.status(500).json({ 
+            error: "Erro ao resgatar a lista de tarefa",
+            detalhe: error.message 
+         });
+      });
+})
+
+
+// GET "/tasks?status=pending" - Busca todas as tarefas de um usuário com o status
+router.get('/', authJwt, async function (req, res) {
+   
+   //busca o id do usuário
+   const userToken = req.headers['authorization'].split(' ')[1];
+   const data = await getUserData(userToken);
+   const id = data.id //armazena qual o id do usuário
+   const status = req.query.status; //armazena o parâmetro passado
+   const validStatuses = ['pendente', 'andamento', 'concluida', 'abandonada'];
+
+   if (!status || !validStatuses.includes(status)) {
+      return res.status(400).json({
+         error: "Status inválido",
+         statusValidos: validStatuses
+      });
+   }
+
+   readTasks(id, status)
+      .then(result => {
+         if (result.length === 0) {
+            res.status(200).json({ 
+               mensagem: `O usuário ${data.username} não tem nenhuma tarefa com o ${status}`,
             });
          } else {
             res.status(200).json({ 
