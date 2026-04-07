@@ -15,7 +15,7 @@ async function createTable() {
             name VARCHAR(50) NOT NULL,
             description VARCHAR(80),
             deadline DATE,
-            urgency ENUM('baixa', 'media', 'alta') DEFAULT 'media',
+            urgency ENUM('Baixa', 'Média', 'Alta') DEFAULT 'media',
             status ENUM('pendente', 'andamento', 'concluida', 'abandonada') DEFAULT 'pendente',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );`;
@@ -47,7 +47,7 @@ export async function readTasks(id, status) {
     await createTable() //verifica se a tabela esta criada
 
     if (status){
-        const query = 'SELECT * FROM tasks WHERE user_id = ? AND status = ?' 
+        const query = 'SELECT * FROM tasks WHERE user_id = ? AND status = ? ORDER BY deadline ASC' 
 
         return new Promise((resolve, reject) => { //promise  com a resposta
             con.query(query, [id, status], (err, result) => { //função que realiza a busca em segundo plano da aplicação
@@ -55,7 +55,7 @@ export async function readTasks(id, status) {
             }) 
         });
     } else {
-        const query = 'SELECT * FROM tasks WHERE user_id = ?'
+        const query = 'SELECT * FROM tasks WHERE user_id = ? ORDER BY deadline ASC'
 
         return new Promise((resolve, reject) => { //promise  com a resposta
             con.query(query, [id], (err, result) => { //função que realiza a busca em segundo plano da aplicação
@@ -111,7 +111,7 @@ export async function createTask(newTask) {
         newTask.name,
         newTask.description || null,
         newTask.deadline || null,
-        newTask.urgency || 'media',
+        newTask.urgency,
         newTask.status || 'pendente',
         newTask.created_at || new Date()
     ];

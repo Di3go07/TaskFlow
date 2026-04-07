@@ -29,10 +29,10 @@ function Tasks(){
                         <Button variant="primary" onClick={() => navigate('/tasks/create')} style={{margin:'24px 0 42px 0', maxWidth:'200px'}}> Nova tarefa </Button>
                     </Box>
 
-                    <TaskCollapse status='pendente' title='Pending Tasks'/>
-                    <TaskCollapse status='andamento' title='Ongoing Tasks'/>
-                    <TaskCollapse status='concluida' title='Done Tasks'/>
-                    <TaskCollapse status='abandonada' title='Dropped Tasks'/>
+                    <TaskCollapse status='pendente' title='Pending Tasks' icon='fa-hourglass-half'/>
+                    <TaskCollapse status='andamento' title='Ongoing Tasks'icon="fa-rotate" />
+                    <TaskCollapse status='concluida' title='Done Tasks' icon="fa-circle-check" />
+                    <TaskCollapse status='abandonada' title='Dropped Tasks' icon="fa-box-archive" />
 
                 </Box>
             </Box>

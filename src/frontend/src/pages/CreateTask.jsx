@@ -14,7 +14,7 @@ function CreateTask() {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [deadline, setDeadline] = useState(dataAtual());
-    const [urgency, setUrgency] = useState("baixa");
+    const [urgency, setUrgency] = useState("Baixa");
 
     const [error, setError] = useState(false)
     const [message, setMessage] = useState("")
@@ -29,6 +29,17 @@ function CreateTask() {
     }
 
     async function handleCreateTask(){
+        if (name.length > 50) {
+            setError(true)
+            setMessage('O nome da tarefa não pode ultrapassar 50 caracteres')
+            return
+        }
+        if (description.length > 80) {
+            setError(true)
+            setMessage('A descrição da tarefa não pode ultrapassar 80 caracteres')
+            return
+        }
+        
         if (name !== "" && description !== "" && deadline !== ""){
             const newTask = {
                 name: name,
@@ -49,7 +60,10 @@ function CreateTask() {
 
                 const data = await response.json();
                 if (data.error){
-                    setError(data.error)
+                    setError(true)
+                    setMessage(data.error)
+                } else if (!data.task) {
+                    navigate('/unauthorized')
                 }else{
                     setMessage(data.mensagem);
                     console.log(data.task);
@@ -103,12 +117,14 @@ function CreateTask() {
                         <Box sx={{ width: {xs: 250, sm: 300, md: 550}}}>
 
                         <TextField label='Title' type="text" maxLength={50} id="title" value={name} onChange={(e) => setName(e.target.value)}/>
+                        <Typography style={{position:'relative', bottom:'20px', fontSize:'12px', color:name.length < 50 ? '#347EBF' : '#D93B3B'}}> {name.length} de 50 </Typography>
                         <TextField multiline label='Description' id="description" maxLength={80} value={description} onChange={(e) => setDescription(e.target.value)} />
+                        <Typography style={{position:'relative', bottom:'20px', fontSize:'12px', color:description.length < 80 ? '#347EBF' : '#D93B3B'}}> {description.length} de 80 </Typography>
                         <TextField  type='date' label='Deadline' id="deadline" value={deadline} onChange={(e) => setDeadline(e.target.value)}/>
-                        <TextField select label='urgency' id="urgency" value={urgency} onChange={(e) => setUrgency(e.target.value)}>
-                            <MenuItem value="alta">Alta</MenuItem>
-                            <MenuItem value="média">Média</MenuItem>
-                            <MenuItem value="baixa">Baixa</MenuItem>
+                        <TextField select label='Urgency' id="urgency" value={urgency} onChange={(e) => setUrgency(e.target.value)}>
+                            <MenuItem value="Alta">Alta</MenuItem>
+                            <MenuItem value="Média">Média</MenuItem>
+                            <MenuItem value="Baixa">Baixa</MenuItem>
                         </TextField>
 
                             <Button variant="primary" onClick={handleCreateTask} style={{margin:'24px 0 42px 0'}}> Salvar </Button>

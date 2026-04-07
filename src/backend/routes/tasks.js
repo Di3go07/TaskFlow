@@ -46,6 +46,7 @@ router.get('/', authJwt, async function (req, res) {
    const status = req.query.status; //armazena o parâmetro passado
    const validStatuses = ['pendente', 'andamento', 'concluida', 'abandonada'];
 
+   
    if (!status || !validStatuses.includes(status)) {
       return res.status(400).json({
          error: "Status inválido",
@@ -117,6 +118,15 @@ router.post('/create', authJwt, async function(req, res) {
    const userToken = req.headers['authorization'].split(' ')[1];
    const data = await getUserData(userToken);
    const userId = data.id //armazena qual o id do usuário
+   const urgency = req.body.urgency; //armazena o parâmetro passado
+   const validUrgency = ['Alta', 'Média', 'Baixa'];
+
+   if (!urgency || !validUrgency.includes(urgency)) {
+      return res.status(400).json({
+         error: "Valor da urgência inválido",
+         statusValidos: validUrgency
+      });   
+   }
 
    //Objeto da nova tarefa com os dados passados
    const newTask = {

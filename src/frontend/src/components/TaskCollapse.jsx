@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Task from './Task';
 import theme from '../theme/theme';
+import Error from '../pages/Error';
 
 function TaskCollapse(props){
     const auth = localStorage.getItem('authorization');
@@ -14,7 +15,7 @@ function TaskCollapse(props){
     const [loading,setLoading] = useState(false);
     const [error, setError] = useState(false)
     const backgroundColor = `tasks.${props.status}`;
-    const colorWithOpacity = `tasks.${props.status}Opacity`;
+    const icon = `fa-solid ${props.icon}`;
 
     async function getUserTasks(token) {
         /*
@@ -50,7 +51,7 @@ function TaskCollapse(props){
             const data = await getUserTasks(userToken);
             if (data){
                 if (data.mensagem === `O usuário ${payload.username} não tem nenhuma tarefa com o ${props.status}`){ 
-                    setMensagem(`Você ainda não tem nenhuma task ${props.status}`);
+                    setMensagem(`Você ainda não tem nenhuma task marcada como ${props.status}`);
                 } else if (data.mensagem && data.mensagem !== "Lista de tasks do usuário retornadas com sucesso!") {
                     setError({status: 404, message: data.mensagem});
                 } else if (data.mensagem === "Lista de tasks do usuário retornadas com sucesso!"){
@@ -58,7 +59,7 @@ function TaskCollapse(props){
                     console.log(data.task)
                 }
                 else {
-                    navigate('/login');
+                    return(<Error codigo='401' subtitle='Não estamos te reconhecendo' mensagem='Parece que a sua sessão expirou. Por favor, faça o login novamente para continuar.' />);
                 }
             }
         };
@@ -89,16 +90,20 @@ function TaskCollapse(props){
                     justifyContent:'space-between',
                     alignItems:'center',
                     bgcolor:backgroundColor,
+                    borderRadius: '10px',
                     padding: 2,
-                    cursor: 'pointer'
-                }}>
-                    <Typography variant="title">{props.title}</Typography>
+                    cursor: 'pointer',
+                }}> 
+                    <Box sx={{display:'flex', gap:2, alignItems:'center'}}>
+                        <i class={icon} style={{color:'white'}}></i>
+                        <Typography variant="title">{props.title}</Typography>
+                    </Box>
                     <Typography variant="title" style={{fontSize:20}}> {open ? '\u25C4' : '\u25BC'}</Typography>
 
                 </Box>
                 <Collapse in={open}>
-                    <Box sx={{padding: 2, backgroundColor:colorWithOpacity, borderRadius:'0 0 10px 10px'}}>
-                        <Typography variant="text"> {mensagem} </Typography>
+                    <Box sx={{margin:'0 42px'}}>
+                        <Typography variant="text" style={{padding:'24px'}}> {mensagem} </Typography>
                         {tasks.map(task => <Task name={task.name} description={task.description} urgency={task.urgency} deadline={task.deadline} id={task.id} status={props.status}/>)}
                     </Box>
                 </Collapse>

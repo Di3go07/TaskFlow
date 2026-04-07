@@ -4,7 +4,7 @@ const theme = createTheme({
     palette: {
         background: {
             main: '#C5D3D9',
-            body: '#FFFFFF'
+            body: '#FFFFFF',
         },
         text: {
             primary: '#000',
@@ -19,16 +19,34 @@ const theme = createTheme({
             error: '#D93B3B',
         },
         tasks: {
-            pendente: '#347EBF',
-            pendenteOpacity: '#347EBF66',
-            andamento: '#228B22',
-            andamentoOpacity: '#228B2266',
-            concluida: '#B23A3A',            
-            concluidaOpacity: '#B23A3A66',
-            abandonada: '#4B5563',
-            abandonadaOpacity: '#4B556366'
-
+          pendente: '#3B82F6',
+          pendenteOpacity: '#3B82F622',
+          pendenteIcon: '#93C5FD66',   // azul mais suave
+          
+          andamento: '#228B22',
+          andamentoOpacity: '#228B2222',
+          andamentoIcon: '#86EFAC',  // verde suave
+          
+          concluida: '#B23A3A',            
+          concluidaOpacity: '#B23A3A22',
+          concluidaIcon: '#FCA5A5',  // vermelho suave
+          
+          abandonada: '#4B5563',
+          abandonadaOpacity: '#4B556322',
+          abandonadaIcon: '#D1D5DB'  // cinza suave
         },
+        urgency: {
+          Baixa: "#DC2626",
+          Média: "#D97706",
+          Alta: "#0284C7",
+          Concluida: "#16A34A"
+        },
+        urgencyBackground: {
+          Baixa: "#FCA5A5",   
+          Média: "#FCD34D",  
+          Alta: "#7DD3FC", 
+          Concluida: "#86EFAC" 
+        }
   },
 
     typography: {
@@ -56,7 +74,7 @@ const theme = createTheme({
                     props: { variant: 'text' },
                     style: {
                         fontFamily: `'Inter', sans-serif`,
-                        fontSize: 14,
+                        fontSize: 16,
                         color: '#000',   
                         lineHeight: 1.8,
                         marginBottom: 16,

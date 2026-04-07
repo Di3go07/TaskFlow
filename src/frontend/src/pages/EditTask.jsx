@@ -48,6 +48,8 @@ function EditTask() {
                 }
                 setError(true)
                 setMessage(data.error);
+            } else if (!data.task ) {
+                navigate('/unauthorized')
             }else{
                 setTask(data.task[0]);
                 console.log(data.task[0].deadline)
@@ -59,6 +61,17 @@ function EditTask() {
     }, [taskId]);
 
     async function handleEditTask(){
+        if (task.name.length > 50) {
+            setError(true)
+            setMessage('O nome da tarefa não pode ultrapassar 50 caracteres')
+            return
+        }
+        if (task.description.length > 80) {
+            setError(true)
+            setMessage('A descrição da tarefa não pode ultrapassar 80 caracteres')
+            return
+        }
+
         try{
             const response = await fetch(`/api/tasks/editar/${taskId}`, {
                 method: 'PUT',
@@ -107,7 +120,9 @@ function EditTask() {
                     <Box> 
                         <Box sx={{ width: {xs: 250, sm: 300, md: 550}, padding:'24px 0'}}>
                             <TextField label='Title' type="text" maxLength={50} id="title" value={task.name} onChange={(e) => setTask(t => ({...t, name:e.target.value}))}/>
+                            <Typography style={{position:'relative', bottom:'20px', fontSize:'12px', color:task.name.length < 50 ? '#347EBF' : '#D93B3B'}}> {task.name.length} de 50 </Typography>
                             <TextField multiline label='Description' id="description" maxLength={80} value={task.description} onChange={(e) => setTask(t => ({...t, description:e.target.value}))} />
+                            <Typography style={{position:'relative', bottom:'20px', fontSize:'12px', color:task.description.length < 0 ? '#347EBF' : '#D93B3B'}}> {task.description.length} de 80 </Typography>
                             <TextField type='date' id="deadline" value={task.deadline} onChange={(e) =>  setTask(t => ({...t, deadline:e.target.value}))} />
                             <TextField
                                 label="Urgency"
@@ -115,9 +130,9 @@ function EditTask() {
                                 value={task.urgency}  
                                 onChange={(e) => setTask(t => ({ ...t, urgency: e.target.value }))}
                                 >
-                                <MenuItem value="alta">Alta</MenuItem>
-                                <MenuItem value="media">Média</MenuItem>
-                                <MenuItem value="baixa">Baixa</MenuItem>
+                                <MenuItem value="Alta">Alta</MenuItem>
+                                <MenuItem value="Média">Média</MenuItem>
+                                <MenuItem value="Baixa">Baixa</MenuItem>
                             </TextField>
                             <TextField
                                 label="Status"
