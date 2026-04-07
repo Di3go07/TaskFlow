@@ -63,6 +63,17 @@ const theme = createTheme({
                     },
                 },
                 {
+                  props: { variant: 'done' },
+                  style: {
+                      fontFamily: `'Inter', sans-serif`,
+                      fontSize: 14,
+                      color: 'grey',   
+                      lineHeight: 1.8,
+                      marginBottom: 16,
+                      textDecoration:'line-through'
+                  },
+                },
+                {
                     props: { variant: 'error'},
                     style: {
                         fontFamily: `'Inter', sans-serif`,

@@ -76,8 +76,8 @@ function Header() {
             <i className="fa-solid fa-house" style={{ marginRight: 8 }}></i> Home
           </MenuItem>
 
-          <MenuItem onClick={() => {handleClose(); navigate('/tasks/create')}}>
-            <i className="fa-solid fa-plus" style={{ marginRight: 8 }}></i> Nova task
+          <MenuItem onClick={() => {handleClose(); navigate('/tasks')}}>
+            <i className="fa-solid fa-list" style={{ marginRight: 8 }}></i> Tasks
           </MenuItem>
 
           <MenuItem onClick={() => {handleClose(); navigate('/settings')}}>

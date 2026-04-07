@@ -53,7 +53,7 @@ function CreateTask() {
                 }else{
                     setMessage(data.mensagem);
                     console.log(data.task);
-                    setDeadline("");
+                    setDeadline(dataAtual());
                     setName("");
                     setDescription("");
                     setUrgency("baixa");
@@ -107,7 +107,7 @@ function CreateTask() {
                         <TextField  type='date' label='Deadline' id="deadline" value={deadline} onChange={(e) => setDeadline(e.target.value)}/>
                         <TextField select label='urgency' id="urgency" value={urgency} onChange={(e) => setUrgency(e.target.value)}>
                             <MenuItem value="alta">Alta</MenuItem>
-                            <MenuItem value="media">Média</MenuItem>
+                            <MenuItem value="média">Média</MenuItem>
                             <MenuItem value="baixa">Baixa</MenuItem>
                         </TextField>
 
