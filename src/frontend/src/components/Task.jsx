@@ -9,7 +9,7 @@ function Task(props){
   const [loading, setLoading] = useState('')
   const navigate = useNavigate();
 
-  const urgencyText = props.status === 'concluida' ? 'Concluida' : props.urgency;
+  const urgencyText = props.status === 'concluida' ? 'Concluida' : props.status === 'abandonada' ? 'Abandonada' :props.urgency;
   const isAbandonada = props.status === 'abandonada' ? 'done' : 'text';
   const colorWithOpacity = `tasks.${props.status}Opacity`;
   const iconColor = `tasks.${props.status}Icon`;
@@ -93,7 +93,7 @@ function Task(props){
           }}>
             <Typography sx={{
               color: `tasks.${props.status}`,
-              fontSize: '60px'
+              fontSize: '45px'
             }}>
                 <i class={taskIcon[props.status]}></i> 
             </Typography>

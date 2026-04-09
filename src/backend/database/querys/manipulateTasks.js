@@ -41,7 +41,7 @@ function formatedResult(result){
 
 export async function readTasks(id, status) {
     /*
-    readTasks() essa função retorna todas as instâncias de tarefas do usuário armazenadas no banco com o status passado 
+    readTasks(id, status) essa função retorna todas as instâncias de tarefas do usuário armazenadas no banco com o status passado 
     */
     const con = await db; //inicializa o banco
     await createTable() //verifica se a tabela esta criada
@@ -63,6 +63,64 @@ export async function readTasks(id, status) {
             }) 
         });
     }
+}
+
+export async function getTasksInfos(id) {
+    /*
+    getTasksInfos(id) executa algumas querys no banco de dados para resgatar alguns dados estatísticos sobre as tarefas do usuário
+    */
+
+    const con = await db; //inicializa o banco
+    await createTable() //verifica se a tabela esta criada
+
+    const queryTotal = 'SELECT COUNT(*) as total FROM tasks WHERE user_id = ?';
+    const queryPendentes = 'SELECT COUNT(*) as pendentes FROM tasks WHERE user_id = ? AND status != "concluida" AND status != "abandonada" AND deadline >= CURDATE()';
+    const queryToday = 'SELECT COUNT(*) as today FROM tasks WHERE user_id = ? AND deadline = CURDATE()';
+
+    try {
+        // Usando a função wrapper
+        const totalResult = await new Promise((resolve, reject) => {
+            con.query(queryTotal, [id], (err, result) => {
+                err ? reject(err) : resolve(result)
+            })
+        });
+        const pendentesResult = await new Promise((resolve, reject) => {
+            con.query(queryPendentes, [id], (err, result) => {
+                err ? reject(err) : resolve(result)
+            })
+        });     
+        const todayResult = await new Promise((resolve, reject) => {
+            con.query(queryToday, [id], (err, result) => {
+                err ? reject(err) : resolve(result)
+            })
+        });   
+                
+        return {
+            total: totalResult[0].total,
+            pendentes: pendentesResult[0].pendentes,
+            today: todayResult[0].today
+        };
+        
+    } catch (error) {
+        console.error('Erro:', error);
+        throw error;
+    }
+}
+
+export async function readLatestsTasks(id){
+    /* 
+    readLatestsTasks(id) essa função retorna as 5 tarefas no banco de dados com a deadline mais próxima de ser atingida, ignorando as de dias anteriores
+    */
+    const con = await db; //inicializa o banco
+    await createTable() //verifica se a tabela esta criada
+
+    const query = 'SELECT name, deadline, status FROM tasks WHERE user_id = ? AND deadline >= CURDATE() ORDER BY deadline ASC LIMIT 5'
+
+    return new Promise((resolve, reject) => { //promise  com a resposta
+        con.query(query, [id], (err, result) => { //função que realiza a busca em segundo plano da aplicação
+         err ? reject(err) : resolve(result);
+        }) 
+    });
 }
 
 export async function readTask(id, userId) {

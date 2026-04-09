@@ -185,10 +185,11 @@ export async function updateUser(updatedUser) {
 
     const queryUpdate = 'UPDATE users SET ? WHERE id = ?';
     const values = [
-        { //objeto da tarefa
+        { //objeto do usuário
             id: userNow[0].id,
             username: updatedUser.username ?? userNow[0].username,
             email: updatedUser.email ?? userNow[0].email,
+            password: updatedUser.password ?? userNow[0].password
         }, 
         updatedUser.id //id do usuário
     ]
@@ -205,7 +206,14 @@ export async function deleteUser(id) {
     await createTable() 
 
     const query = 'DELETE FROM users WHERE id = ?';
+    const queryTasks = 'DELETE FROM tasks WHERE user_id = ?';
 
+    await new Promise((resolve, reject) => {
+        con.query(queryTasks, [id], (err, result) => {
+            err ? reject(err) : resolve(result);
+        });
+        console.log('Tarefas do usuário deletadas')
+    });
     return new Promise((resolve, reject) => {
         con.query(query, [id], (err, result) => {
             err ? reject(err) : resolve(result);

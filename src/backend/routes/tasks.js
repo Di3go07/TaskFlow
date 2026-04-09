@@ -1,5 +1,5 @@
 import express from 'express';
-import { readTasks, readTask, createTask, updateTask, deleteTask } from '../database/querys/manipulateTasks.js'
+import { readTasks, readTask, createTask, updateTask, deleteTask, readLatestsTasks, getTasksInfos } from '../database/querys/manipulateTasks.js'
 import { getUserData } from '../database/querys/manipulateUsers.js'
 import { authJwt } from '../middleware/authJwt.js'
 
@@ -35,6 +35,77 @@ router.get('/all', authJwt, async function (req, res) {
       });
 })
 
+// GET "taskes/infos" - Retornar alguns dados sobre as tarefas para serem impressos na home
+router.get('/infos', authJwt, async function (req, res) {
+   //busca o id do usuário
+   const userToken = req.headers['authorization'].split(' ')[1];
+   const data = await getUserData(userToken);
+   const id = data.id 
+
+   getTasksInfos(id)
+      .then (result => {
+         res.status(200).json({ 
+            result
+         });
+      })
+})
+
+// GET "tasks/latests" - Retorna as 5 últimas tarefas do usuário reformatadas para serem renderizadas na home do site
+router.get('/latests', authJwt, async function (req, res) {
+
+      //busca o id do usuário
+      const userToken = req.headers['authorization'].split(' ')[1];
+      const data = await getUserData(userToken);
+      const id = data.id //armazena qual o id do usuário
+   
+      readLatestsTasks(id)
+         .then(result => {
+            if (result.length === 0) {
+               res.status(200).json({ 
+                  mensagem: `O usuário ${data.username} não tem nenhuma tarefa`,
+               });
+            } else {
+
+               // Formata as tasks substituindo as datas de hoje e amanhã por strings
+               const tasksFormatadas = result.map(task => {
+                  const taskDate = new Date(task.deadline);
+                  const today = new Date();
+                  const tomorrow = new Date(today);
+                  tomorrow.setDate(tomorrow.getDate() + 1);
+                  
+                  // Comparar apenas a data (sem hora)
+                  const taskDateStr = taskDate.toDateString();
+                  const todayStr = today.toDateString();
+                  const tomorrowStr = tomorrow.toDateString();
+                  
+                  let deadlineTexto = task.deadline;
+                  
+                  if (taskDateStr === todayStr) {
+                     deadlineTexto = "Today";
+                  } else if (taskDateStr === tomorrowStr) {
+                     deadlineTexto = "Tomorrow";
+                  }
+                  
+                  return {
+                  ...task,
+                  deadline: deadlineTexto
+                  };
+               });
+
+               res.status(200).json({ 
+                  mensagem: "Lista de tasks do usuário retornadas com sucesso!",
+                  task: tasksFormatadas 
+               });
+            }
+         })
+         .catch(error => {
+            console.error("Erro ao resgatar task:", error);
+            res.status(500).json({ 
+               error: "Erro ao resgatar a lista de tarefa",
+               detalhe: error.message 
+            });
+         });
+})
 
 // GET "/tasks?status=pending" - Busca todas as tarefas de um usuário com o status
 router.get('/', authJwt, async function (req, res) {

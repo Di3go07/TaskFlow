@@ -5,6 +5,7 @@ import Home from "./pages/Home.jsx";
 import Tasks from "./pages/Tasks.jsx";
 import CreateTask from "./pages/CreateTask.jsx";
 import Register from "./pages/Register.jsx";
+import Settings from "./pages/Settings.jsx";
 import EditTask from "./pages/EditTask.jsx";
 import Error from "./pages/Error.jsx";
 
@@ -14,6 +15,7 @@ const AppRoutes = () => {
             <Routes>
                 <Route path='/register' element = { <Register/> } />
                 <Route path="/login" element = { <Login/> }  />
+                <Route path="/settings" element = { <Settings/> } />
                 <Route path="/" element = { <Home /> } />
                 <Route path="/tasks" element = { <Tasks />} />
                 <Route path="/tasks/create" element = { <CreateTask />} />

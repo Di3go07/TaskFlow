@@ -133,10 +133,14 @@ router.put('/edit', authJwt, async function (req, res) {
     const data = await getUserData(userToken);
     const userId = data.id;
     
+    const saltRounds = 10; 
+    const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+
     const newUser = {
         id: userId, //recebe o id do user logado
         username: req.body.username || null,
-        email: req.body.email || null
+        email: req.body.email || null,
+        password: hashedPassword || null
     };
 
     updateUser(newUser)

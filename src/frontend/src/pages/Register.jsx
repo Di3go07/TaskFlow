@@ -14,6 +14,8 @@ function Register(){
     const [confirmPassword, setConfirmPassword] = useState("");
     const [icon, setIcon] = useState("fa-eye");
     const [showPassword, setShowPassword] = useState(false);
+    const [confirmedIcon, setConfirmedIcon] = useState("fa-eye");
+    const [showConfirmedPassword, setShowConfirmedPassword] = useState(false)
 
     const [error, setError] = useState(false);
     const [message, setMessage] = useState("");
@@ -25,6 +27,16 @@ function Register(){
           setIcon('fa-eye-slash')
         } else {
           setIcon('fa-eye')
+        }
+    }
+
+    function handleShowConfirmedPassword(){
+        setShowConfirmedPassword(!showConfirmedPassword);
+        
+        if (confirmedIcon === 'fa-eye'){
+          setConfirmedIcon('fa-eye-slash')
+        } else {
+          setConfirmedIcon('fa-eye')
         }
     }
 
@@ -62,7 +74,8 @@ function Register(){
             setMessage('Preencha todos os campos antes de enviar!')
         }
     }     
-            
+          
+    
     return(
         <ThemeProvider theme={theme}>
             <Box sx={{
@@ -116,7 +129,22 @@ function Register(){
                             </Box>
                         </Box>
 
-                        <TextField label='Confirm password' type={showPassword ? "text" : "password"} id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
+                        <Box sx={{ position: 'relative'}}>
+                            <TextField label='Confirm password' type={showConfirmedPassword ? "text" : "password"} id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
+
+                            <Box
+                                onClick={handleShowConfirmedPassword}
+                                sx={{
+                                position: 'absolute',
+                                right: -25,
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                cursor: 'pointer',
+                                }}
+                            >
+                                <i className={`fa-regular ${confirmedIcon}`} style={{marginBottom:'24px'}}></i>
+                            </Box>
+                        </Box>
                     </Box>
 
                     <Button variant='primary' onClick={handleRegister} style={{marginTop:'24px'}}> Register </Button>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Collapse, Button, Box, Typography, ThemeProvider } from '@mui/material';
+import { Button, Box, Typography, ThemeProvider } from '@mui/material';
 import theme from '../theme/theme';
 import Header from '../components/Header';
 
@@ -139,8 +139,3 @@ function Home(){
 
 export default Home;
 
-/* 
-            <div className='Tasks'>
-                {tasks.map(task => <Task name={task.name} description={task.description} urgency={task.urgency} deadline={task.deadline} id={task.id}/>)}
-            </div>
-*/

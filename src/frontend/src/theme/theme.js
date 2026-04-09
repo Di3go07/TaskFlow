@@ -39,13 +39,15 @@ const theme = createTheme({
           Baixa: "#DC2626",
           Média: "#D97706",
           Alta: "#0284C7",
-          Concluida: "#16A34A"
+          Concluida: "#16A34A",
+          Abandonada: "#4B5563"
         },
         urgencyBackground: {
           Baixa: "#FCA5A5",   
           Média: "#FCD34D",  
           Alta: "#7DD3FC", 
-          Concluida: "#86EFAC" 
+          Concluida: "#86EFAC" ,
+          Abandonada: "#D1D5DB"
         }
   },
 
@@ -229,6 +231,16 @@ const theme = createTheme({
                         }
                     }
                 },
+                {
+                  props: { variant: 'del' },
+                  style: {
+                      backgroundColor: '#A64444',
+                      color: '#fff',
+                      '&:hover': {
+                      backgroundColor: '#823535'
+                      }
+                  }
+              },
             ]
         },
         MuiIconButton: {

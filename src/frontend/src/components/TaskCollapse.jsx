@@ -57,9 +57,8 @@ function TaskCollapse(props){
                 } else if (data.mensagem === "Lista de tasks do usuário retornadas com sucesso!"){
                     setTasks(data.task)
                     console.log(data.task)
-                }
-                else {
-                    return(<Error codigo='401' subtitle='Não estamos te reconhecendo' mensagem='Parece que a sua sessão expirou. Por favor, faça o login novamente para continuar.' />);
+                } else {
+                    navigate('/unauthorized')
                 }
             }
         };
