@@ -52,7 +52,6 @@ function EditTask() {
                 navigate('/unauthorized')
             }else{
                 setTask(data.task[0]);
-                console.log(data.task[0].deadline)
             }
         })
         .catch(error => {

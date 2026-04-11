@@ -56,7 +56,6 @@ function TaskCollapse(props){
                     setError({status: 404, message: data.mensagem});
                 } else if (data.mensagem === "Lista de tasks do usuário retornadas com sucesso!"){
                     setTasks(data.task)
-                    console.log(data.task)
                 } else {
                     navigate('/unauthorized')
                 }

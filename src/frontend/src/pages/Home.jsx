@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Box, Typography, ThemeProvider } from '@mui/material';
 import theme from '../theme/theme';
 import Header from '../components/Header';
+import BoxInfos from '../components/BoxInfos';
+import LatestTask from '../components/LatestTask';
 
 function Home(){
     const navigate = useNavigate();
@@ -10,7 +12,11 @@ function Home(){
     const [token, setToken] = useState("");
     const [user, setUser] = useState("");
     const [tasks, setTasks] = useState([]);
-
+    const [infos, setInfos] = useState({
+        total: 0,
+        pendentes: 0,
+        today: 0
+    })
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [mensagem, setMensagem] = useState("");
@@ -37,6 +43,23 @@ function Home(){
         }
     }
 
+    async function getTasksData(token) {
+        try{
+            const response = await fetch('api/tasks/infos', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            const data = await response.json();
+            return data;
+        } catch(error){
+            console.error('Erro na requisição:', error);
+        }
+    }
+
     async function getUserTasks(token) {
         /*
         getUserTasks(token) recebe o token como parâmetro para validar a requisição da API. 
@@ -44,7 +67,7 @@ function Home(){
         O retorno é uma lista de objetos das tarefas e é armazenado na variável "tasks".
         */
         try {
-            const response = await fetch('api/tasks/all', {
+            const response = await fetch('api/tasks/latests', {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
@@ -59,7 +82,7 @@ function Home(){
         }
     } 
 
-    useEffect( () => {
+    useEffect( () =>  {
         if (!auth){
             navigate('/login')
         } else {
@@ -79,6 +102,14 @@ function Home(){
             }
         };
 
+        const fetchTaskInfos = async () => {
+            const userToken = auth.split(" ")[1];
+            const data = await getTasksData(userToken);
+            if (data){
+                setInfos(data.result)
+            }
+        }
+
         const fetchUserTasks = async () => {
             const userToken = auth.split(" ")[1];
             const user = await fetchUserData();
@@ -97,6 +128,7 @@ function Home(){
             }
         };
 
+        fetchTaskInfos()
         fetchUserData()
         fetchUserTasks()
 
@@ -116,21 +148,58 @@ function Home(){
 
     return(
         <ThemeProvider theme={theme}>
-            <Box sx={{margin:'0 128px 42px 128px'}}>
+            <Box sx={{margin:'0 128px 0 128px'}}>
                 <Header />
 
                 <Box
                     sx={{
                     display:"flex",
                     flexDirection:'column',
-                    bgcolor: 'background.body',
-                    boxShadow: 1,
-                    borderRadius: 5,
-                    padding: 5,
-                    minWidth: 300,
+                    margin: '0 42px'
                     }}
                 >
-                    <Typography variant="h2" component="h2">Bem vindo, {user.username}</Typography>
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'column',  
+                        maxWidth: '35vw',
+                        margin: '0 42px'
+                    }}>
+                        <Typography variant="h2" component="h2" sx={{position: 'relative', bottom: 15}}>
+                            {infos.today === 0 ? `Tire um dia de folga, ${user.username}` : infos.total == 0 ? `Escreva sua primeira tarefa, ${user.username}` : `Bem vindo, ${user.username}. Quais as tarefas de hoje?` }
+                        </Typography>
+
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            margin: '24px 0',
+                        }}>
+                            <BoxInfos color='#347EBF' text='Total' value={infos.total} />
+                            <BoxInfos color='#B23A3A' text='Pendentes' value={infos.pendentes} />
+                            <BoxInfos color='#347EBF' text='Hoje' value={infos.today} />
+                        </Box>
+
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            bgcolor: 'background.body', 
+                            margin: '42px 0',
+                            boxShadow: 5,
+                            p: '24px 42px 42px 42px',
+                            borderRadius: '25px'
+                        }}>
+                            <Box sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignContent: 'center'
+                            }}>
+                                <Typography variant="h2" component="h2"> Next tasks </Typography>
+                                <Typography sx={{margin:'24px 0'}}> <a href='/tasks'>View all</a> </Typography>
+                            </Box>
+                            {tasks.map( task => <LatestTask id={task.id} name={task.name} deadline={task.deadline} status={task.status} /> )}
+                        </Box>
+                    </Box>
+
                 </Box>
             </Box>
         </ThemeProvider>

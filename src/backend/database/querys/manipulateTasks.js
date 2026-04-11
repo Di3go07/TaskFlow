@@ -30,11 +30,48 @@ async function createTable() {
     })
 }
 
-function formatedResult(result){
-    return result.map(task => ({
-        ...task,
-        deadline: result[0].deadline.toISOString().split("T")[0]
-    }));
+async function formatedResult(result){
+    async function updateStatus(id){
+        const con = await db; //inicializa o banco
+        await createTable() //verifica se a tabela esta criada
+
+        const queryUpdate = 'UPDATE tasks SET status = ? WHERE id = ?';
+
+        return new Promise((resolve, reject) => {
+            con.query(queryUpdate, ['abandonada', id], (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    }
+
+    async function verifyStatus(task){
+        if (task.status !== 'concluida' && task.status !== 'abandonada'){
+            const hoje = new Date();
+            const date = task.deadline
+            const dataStr = date.toISOString().split('T')[0];
+            const hojeStr = hoje.toISOString().split('T')[0];
+            
+            if (dataStr < hojeStr) {
+                await updateStatus(task.id)
+                return 'abandonada'
+            }
+        } else {
+            return task.status
+        }
+    }   
+
+    const updatedTasks = await Promise.all(
+        result.map(async (task) => ({
+            ...task,
+            status: await verifyStatus(task)
+        }))
+    );
+
+    return updatedTasks;
 }
 
 // -- Manipulações no banco --
@@ -51,7 +88,7 @@ export async function readTasks(id, status) {
 
         return new Promise((resolve, reject) => { //promise  com a resposta
             con.query(query, [id, status], (err, result) => { //função que realiza a busca em segundo plano da aplicação
-             err ? reject(err) : resolve(result);
+             err ? reject(err) : resolve(formatedResult(result));
             }) 
         });
     } else {
@@ -59,7 +96,7 @@ export async function readTasks(id, status) {
 
         return new Promise((resolve, reject) => { //promise  com a resposta
             con.query(query, [id], (err, result) => { //função que realiza a busca em segundo plano da aplicação
-             err ? reject(err) : resolve(result);
+             err ? reject(err) : resolve(formatedResult(result));
             }) 
         });
     }
@@ -114,7 +151,7 @@ export async function readLatestsTasks(id){
     const con = await db; //inicializa o banco
     await createTable() //verifica se a tabela esta criada
 
-    const query = 'SELECT name, deadline, status FROM tasks WHERE user_id = ? AND deadline >= CURDATE() ORDER BY deadline ASC LIMIT 5'
+    const query = 'SELECT id, name, deadline, status FROM tasks WHERE user_id = ? AND deadline >= CURDATE() ORDER BY deadline ASC LIMIT 5'
 
     return new Promise((resolve, reject) => { //promise  com a resposta
         con.query(query, [id], (err, result) => { //função que realiza a busca em segundo plano da aplicação
@@ -129,6 +166,13 @@ export async function readTask(id, userId) {
     */
     const con = await db;
     await createTable();
+
+    async function formatData(result){
+        return result.map((task) => ({
+            ...task,
+            deadline: task.deadline.toISOString().split('T')[0]
+        }))
+    }
 
     //resgata o id do proprietario da tarefa
     const queryRead = 'SELECT * FROM tasks WHERE id = ?';
@@ -145,7 +189,7 @@ export async function readTask(id, userId) {
 
         return new Promise((resolve, reject) => {
             con.query(query, [id], (err, result) => {
-                err ? reject(err) : resolve(formatedResult(result));
+                err ? reject(err) : resolve(formatData(result));
             })
         })
     } else {
