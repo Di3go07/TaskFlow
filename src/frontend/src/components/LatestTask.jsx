@@ -27,8 +27,9 @@ function LatestTask(props) {
     return(
         <Box sx={{
             display: 'flex',
+            flexDirection: {xs:'column', lg:'row'},
             justifyContent: 'space-between',
-            alignItems: 'center',      
+            alignItems: {xs: 'start', lg: 'center'},      
             padding: '12px 0',
             width: '100%',
             color: props.status === 'abandonada' ? '#4B5563' : '#000'
@@ -56,6 +57,7 @@ function LatestTask(props) {
             <Typography sx={{
                 fontSize: '16px', 
                 textDecoration: props.status === 'abandonada' ? 'line-through' : 'none',
+                p: {xs: '0 50px', lg: 0}
             }}> 
                 {dataFormatada} 
             </Typography>

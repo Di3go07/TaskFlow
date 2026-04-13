@@ -73,7 +73,7 @@ function Task(props){
       <ThemeProvider theme={theme}>
         <Box sx={{
           display: 'grid',
-          gridTemplateColumns: '1fr 3fr 1fr', 
+          gridTemplateColumns: { xs: '1fr', lg: '1fr 3fr 1fr' },          
           alignItems: 'center',
           justifyItems: 'center',
           padding: 5,
@@ -89,11 +89,13 @@ function Task(props){
             justifyContent: 'center',
             borderRadius:'25px',
             minHeight: '150px',
-            minWidth: '150px'
+            minWidth: '150px',
+            display: {xs: 'none', lg: 'flex'}
+
           }}>
             <Typography sx={{
               color: `tasks.${props.status}`,
-              fontSize: '45px'
+              fontSize: '45px',
             }}>
                 <i class={taskIcon[props.status]}></i> 
             </Typography>
@@ -108,9 +110,10 @@ function Task(props){
             <Typography variant={isAbandonada}>{props.description}</Typography>
             <Box sx={{
               display: 'flex',
-              flexDirection: 'row',
-              alignItems:'center',
-              gap: 5
+              flexDirection: {xs: 'column', lg: 'row'},
+              alignItems:{xs: 'start', lg: 'center'},
+              gap: {xs: 2, lg: 5},
+              marginTop: {xs: '12px', lg: 0},
             }}>
               <Typography variant={isAbandonada} sx={{ 
                 bgcolor: theme.palette.urgencyBackground[urgencyText],
@@ -146,6 +149,7 @@ function Task(props){
               width: '100%',
               display: 'flex',
               justifyContent: 'space-around',
+              marginTop: {xs: '24px', lg: 0}
             }}>
               <a 
                 href={`/tasks/edit/${props.id}`} 

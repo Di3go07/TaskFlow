@@ -13,9 +13,10 @@ function BoxInfos(props){
                 p: 3,
                 borderRadius: '25px', 
                 boxShadow: 5,
+                margin: {xs: '24px 42px', lg: '0'}
             }}>
-                <Typography sx={{fontSize:'18px'}}> {props.text} </Typography>
-                <Typography sx={{fontSize:'42px', fontWeight:600}}> {props.value} </Typography>
+                <Typography variant='title'> {props.text} </Typography>
+                <Typography variant='number'> {props.value} </Typography>
             </Box>
         </ThemeProvider>
     );

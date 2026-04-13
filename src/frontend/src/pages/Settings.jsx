@@ -96,6 +96,11 @@ function Settings(){
             setMessage('As senhas não coincidem')
             return
         };
+        if (user.password === ''){
+            setError(true)
+            setMessage('Forneça a sua senha atual ou uma nova')
+            return
+        }
 
         try{
             const response = await fetch(`/api/auth/edit`, {
@@ -159,7 +164,7 @@ function Settings(){
 
     return(
         <ThemeProvider theme={theme}>
-            <Box sx={{margin:'0 128px 42px 128px'}}>
+            <Box sx={{ margin: { xs: '0 16px', sm: '0 32px', md: '0 64px', lg: '0 128px' } }}>
                 <Header />
 
                 <Box
@@ -213,8 +218,8 @@ function Settings(){
                             </Box>
                         </Box>
 
-                        <Box sx={{display:"flex", flexDirection:"row", justifyContent:"space-around"}}>
-                            <Button variant="edit" onClick={handleEditUser} style={{margin:'24px 0 42px 0', width:'200px'}}> Editar </Button>
+                        <Box sx={{display:"flex", flexDirection:{xs:'column' ,lg:"row"}, justifyContent:"space-around"}}>
+                            <Button variant="edit" onClick={handleEditUser} style={{margin: {xs: '0', lg:'24px 0 42px 0'}, width:'200px'}}> Editar </Button>
                             <Button variant="del" onClick={handleDeleteUser} style={{margin:'24px 0 42px 0', width:'200px'}}> Deletar usário </Button>
                         </Box>
                         <Typography variant={error ? "error" : "sucess"}>{message}</Typography>

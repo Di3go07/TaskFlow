@@ -53,20 +53,32 @@ const theme = createTheme({
 
     typography: {
         fontFamily: `'Inter', 'Montserrat', 'Roboto', 'Arial', sans-serif`,
-        h1: {
-            fontFamily: `'Montserrat', sans-serif`,
-            fontSize: 42,
-            fontWeight: 800,
-            color: '#347EBF',
-            margin: 42,
-        },
         h2: {
-            fontFamily: `'Montserrat', sans-serif`,
-            fontSize: 24,
-            fontWeight: 800,
-            color:'#347EBF',
-            margin: '24px 0',
+          fontFamily: `'Montserrat', sans-serif`,
+          fontSize: 24,
+          fontWeight: 800,
+          color: '#347EBF',
+          margin: '24px 0',
         },
+        h1Login: {
+          fontFamily: `'Montserrat', sans-serif`,
+          fontSize: 42,
+          fontWeight: 800,
+          color: '#347EBF',
+          margin: '0 0 42px 0'
+        },
+        h1Header: {
+          fontFamily: `'Montserrat', sans-serif`,
+          fontSize: 42,
+          fontWeight: 800,
+          color: '#347EBF',
+          '@media (min-width:1200px)': {
+            margin: '42px'
+          },
+          '@media (max-width:1199.95px)': {
+            margin: '24px 0'
+          }
+        }
     },
 
     components: {
@@ -108,11 +120,19 @@ const theme = createTheme({
                   props: { variant: 'title'},
                     style: {
                         fontFamily: `'Montserrat', sans-serif`,
-                        fontSize: 14,
-                        fontWeight: 800,
+                        fontSize: 16,
                         color: '#fff',   
                         lineHeight: 1.8,
                     }
+                },                {
+                  props: { variant: 'number' },
+                  style: {
+                      fontFamily: `'Inter', sans-serif`,
+                      fontSize: 42,
+                      color: '#fff',   
+                      lineHeight: 1.8,
+                      fontWeight: 800,
+                  },
                 },
                 //Error Page
                 {

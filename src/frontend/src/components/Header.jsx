@@ -42,7 +42,7 @@ function Header() {
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display:'flex', justifyContent:'space-between', alignItems:'center', margin:'24px' }}>
-        <Typography variant="h1" component="h1" style={{cursor:'pointer'}} onClick={() => navigate('/')}>
+        <Typography variant="h1Header" component="h1" style={{cursor:'pointer'}} onClick={() => navigate('/')}>
           Task<span style={{ color:'#B23A3A' }}>Flow</span>
         </Typography>
 

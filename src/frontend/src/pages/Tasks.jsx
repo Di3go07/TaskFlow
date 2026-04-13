@@ -9,8 +9,8 @@ function Tasks(){
 
     return(
         <ThemeProvider theme={theme}>
-            <Box sx={{margin:'0 128px 42px 128px'}}>
-                <Header/>
+            <Box sx={{ margin: { xs: '0', sm: '0 32px', md: '0 64px', lg: '0 128px' } }}>
+            <Header/>
 
                 <Box
                     sx={{

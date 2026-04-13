@@ -148,21 +148,21 @@ function Home(){
 
     return(
         <ThemeProvider theme={theme}>
-            <Box sx={{margin:'0 128px 0 128px'}}>
+            <Box sx={{ margin: { xs: '0 16px', sm: '0 32px', md: '0 64px', lg: '0 128px' } }}>
                 <Header />
 
                 <Box
                     sx={{
                     display:"flex",
                     flexDirection:'column',
-                    margin: '0 42px'
+                    margin: { sm: '0', lg:'0 42px'}
                     }}
                 >
                     <Box sx={{
                         display: 'flex',
                         flexDirection: 'column',  
-                        maxWidth: '35vw',
-                        margin: '0 42px'
+                        maxWidth: { sm: '100vw', lg: '35vw' },
+                        margin: { sm: '0', lg:'0 0 0 42px'} 
                     }}>
                         <Typography variant="h2" component="h2" sx={{position: 'relative', bottom: 15}}>
                             {infos.today === 0 ? `Tire um dia de folga, ${user.username}` : infos.total == 0 ? `Escreva sua primeira tarefa, ${user.username}` : `Bem vindo, ${user.username}. Quais as tarefas de hoje?` }
@@ -170,7 +170,7 @@ function Home(){
 
                         <Box sx={{
                             display: 'flex',
-                            flexDirection: 'row',
+                            flexDirection: { xs: 'column', lg: 'row' },
                             justifyContent: 'space-between',
                             margin: '24px 0',
                         }}>

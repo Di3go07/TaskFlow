@@ -68,8 +68,9 @@ function Login() {
         flexDirection:'column',
         justifyContent: 'center',
         alignItems: 'center',
+        minHeight: '100vh',
       }}>
-        <Typography variant="h1" component="h1"> Task<span style={{ color:'#B23A3A'}}>Flow</span> </Typography>
+        <Typography variant="h1Login" component="h1"> Task<span style={{ color:'#B23A3A'}}>Flow</span> </Typography>
           
           <Box
             sx={{

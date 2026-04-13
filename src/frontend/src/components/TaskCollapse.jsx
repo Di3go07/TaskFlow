@@ -100,7 +100,7 @@ function TaskCollapse(props){
 
                 </Box>
                 <Collapse in={open}>
-                    <Box sx={{margin:'0 42px'}}>
+                    <Box sx={{margin: {xs: '0', lg: '0 42px'} }}>
                         <Typography variant="text" style={{padding:'24px'}}> {mensagem} </Typography>
                         {tasks.map(task => <Task name={task.name} description={task.description} urgency={task.urgency} deadline={task.deadline} id={task.id} status={props.status}/>)}
                     </Box>
