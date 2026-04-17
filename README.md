@@ -85,6 +85,16 @@ Conheça as rotas de API do projeto
 | PUT | /auth/edit | Edita os dados do usuario conectado atualmente | Sim |
 | DELETE | /auth/delete | Deleta o usuario conectado atualmente | Sim |
 
+**Notes**
+
+| Metodo | Rota | Descricao | Autenticacao |
+|--------|------|-----------|--------------|
+| GET | /notes/all | Lista todas as notas de um usuario | Sim |
+| GET | /notes/latest | Lista as 3 últimas notas criadas | Sim |
+| POST | /notes/create | Adiciona uma nova nota | Sim |
+| DELETE | /notes/:id | Deleta uma nota | Sim |
+
+
 Para as rotas que necessitam de autenticação, o próprio projeto lida com o envio do token do usuário após ele ter realizado o login.
 
 Além disso, o sistema não permite visualizar, editar ou deletar tarefas de outros usuários.
