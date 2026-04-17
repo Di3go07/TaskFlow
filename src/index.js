@@ -1,6 +1,7 @@
 import express from "express";
 import tasksRoutes from "./backend/routes/tasks.js";
 import usersRoutes from "./backend/routes/users.js";
+import notesRoutes from "./backend/routes/notes.js"
 import dotenv from "dotenv";
 
 dotenv.config(); //le as variáveis locais
@@ -10,6 +11,7 @@ app.use(express.json());
 // -- Rotas --
 app.use("/tasks", tasksRoutes);
 app.use("/auth", usersRoutes);
+app.use("/notes", notesRoutes);
 
 // --  Server --
 var server = app.listen(5000, function () {

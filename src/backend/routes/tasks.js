@@ -228,6 +228,8 @@ router.post('/create', authJwt, async function(req, res) {
    }
    const deadlineDate = new Date(newTask.deadline);
    const dataAtual = new Date();
+   dataAtual.setHours(0, 0, 0, 0); //garante que vai comparar apenas as datas
+   deadlineDate.setHours(0, 0, 0, 0);
    if (deadlineDate < dataAtual) {
       return res.status(400).json({ 
          error: "A data do deadline já passou. Escolha uma data futura.",

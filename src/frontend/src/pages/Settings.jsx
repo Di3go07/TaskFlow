@@ -219,7 +219,7 @@ function Settings(){
                         </Box>
 
                         <Box sx={{display:"flex", flexDirection:{xs:'column' ,lg:"row"}, justifyContent:"space-around"}}>
-                            <Button variant="edit" onClick={handleEditUser} style={{margin: {xs: '0', lg:'24px 0 42px 0'}, width:'200px'}}> Editar </Button>
+                            <Button variant="edit" onClick={handleEditUser} style={{margin:'24px 0 42px 0', width:'200px'}}> Editar </Button>
                             <Button variant="del" onClick={handleDeleteUser} style={{margin:'24px 0 42px 0', width:'200px'}}> Deletar usário </Button>
                         </Box>
                         <Typography variant={error ? "error" : "sucess"}>{message}</Typography>

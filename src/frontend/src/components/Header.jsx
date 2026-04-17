@@ -80,6 +80,10 @@ function Header() {
             <i className="fa-solid fa-list" style={{ marginRight: 8 }}></i> Tasks
           </MenuItem>
 
+          <MenuItem onClick={() => {handleClose(); navigate('/notes')}}>
+            <i className="fa-solid fa-note-sticky" style={{ marginRight: 8 }}></i> Notes
+          </MenuItem>
+
           <MenuItem onClick={() => {handleClose(); navigate('/settings')}}>
             <i className="fa-solid fa-gear" style={{ marginRight: 8 }}></i> Configurações
           </MenuItem>

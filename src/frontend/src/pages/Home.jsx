@@ -5,6 +5,8 @@ import theme from '../theme/theme';
 import Header from '../components/Header';
 import BoxInfos from '../components/BoxInfos';
 import LatestTask from '../components/LatestTask';
+import Calendario from '../components/Calendario';
+import HomeNotes from '../components/HomeNotes'
 
 function Home(){
     const navigate = useNavigate();
@@ -12,6 +14,7 @@ function Home(){
     const [token, setToken] = useState("");
     const [user, setUser] = useState("");
     const [tasks, setTasks] = useState([]);
+    const [notes, setNotes] = useState([]);
     const [infos, setInfos] = useState({
         total: 0,
         pendentes: 0,
@@ -82,6 +85,23 @@ function Home(){
         }
     } 
 
+    async function getUserNotes(token) {
+        try {
+            const response = await fetch('api/notes/latests', {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+            });
+
+            const data = await response.json();
+            return data
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+        }
+    }
+
     useEffect( () =>  {
         if (!auth){
             navigate('/login')
@@ -95,7 +115,8 @@ function Home(){
             if (data) {
               if(data.message !== "Dados do usuário retornados com sucessos"){ 
                navigate("/login") //caso não retorne os dados do usuário, força o usuário à refazer o seu login
-              } else {
+                return
+            } else {
                 setUser(data.user)
                 return data.user;
               }
@@ -128,9 +149,24 @@ function Home(){
             }
         };
 
+        const fetchUserNotes = async () => {
+            const userToken = auth.split(" ")[1];
+            const data = await getUserNotes(userToken);
+            if (data){
+                if (data.mensagem !== "Lista de últimas notas do usuário retornadas com sucesso!") {
+                    console.log(data.mensagem);
+                    setError({status: 404, message: data.mensagem});
+                } else {
+                    setNotes(data.notes)
+                    console.log(data.notes)
+                }
+            }
+        }
+
         fetchTaskInfos()
         fetchUserData()
         fetchUserTasks()
+        fetchUserNotes()
 
         setLoading(false); //retira a tela de loading quando carrega tudo do banco de dados
     }, []);
@@ -154,18 +190,19 @@ function Home(){
                 <Box
                     sx={{
                     display:"flex",
-                    flexDirection:'column',
-                    margin: { sm: '0', lg:'0 42px'}
+                    flexDirection:{ xs: 'column', lg:'row'},
+                    margin: { sm: '0', lg:'0 42px'},
+                    justifyContent: 'space-between',
                     }}
                 >
                     <Box sx={{
                         display: 'flex',
                         flexDirection: 'column',  
-                        maxWidth: { sm: '100vw', lg: '35vw' },
+                        flex: 2,
                         margin: { sm: '0', lg:'0 0 0 42px'} 
                     }}>
                         <Typography variant="h2" component="h2" sx={{position: 'relative', bottom: 15}}>
-                            {infos.today === 0 ? `Tire um dia de folga, ${user.username}` : infos.total == 0 ? `Escreva sua primeira tarefa, ${user.username}` : `Bem vindo, ${user.username}. Quais as tarefas de hoje?` }
+                            {infos.total === 0 ? `Escreva sua primeira tarefa, ${user.username}` : infos.today === 0 ? `Tire um dia de folga, ${user.username}`  : `Bem vindo, ${user.username}. Quais as tarefas de hoje?` }
                         </Typography>
 
                         <Box sx={{
@@ -199,7 +236,25 @@ function Home(){
                             {tasks.map( task => <LatestTask id={task.id} name={task.name} deadline={task.deadline} status={task.status} /> )}
                         </Box>
                     </Box>
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        flex: 2,
+                        justifyContent: 'center',
+                        alignContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                        < Calendario />
 
+                        <Box sx={{
+                            display:'flex',
+                            flexWrap: 'wrap',
+                            justifyContent: 'space-around',
+                            marginTop: '42px'
+                        }}>
+                            {notes.map(note => <HomeNotes content={note.content} date={note.created_at}/>)}
+                        </Box>
+                    </Box>
                 </Box>
             </Box>
         </ThemeProvider>

@@ -95,6 +95,24 @@ const theme = createTheme({
                     },
                 },
                 {
+                  props: { variant: 'note' },
+                  style: {
+                      fontFamily: `'Inter', sans-serif`,
+                      fontSize: 25,
+                      color: '#000',   
+                      lineHeight: 1.8,
+                  },
+                },
+                {
+                  props: { variant: 'small' },
+                  style: {
+                      fontFamily: `'Inter', sans-serif`,
+                      fontSize: 12,
+                      fontStyle: 'italic',
+                      color: 'gray',   
+                  },
+                },
+                {
                   props: { variant: 'done' },
                   style: {
                       fontFamily: `'Inter', sans-serif`,

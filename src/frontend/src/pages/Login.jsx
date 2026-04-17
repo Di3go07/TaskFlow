@@ -126,7 +126,7 @@ function Login() {
                   <Button variant="primary" onClick={() => handleLogin()} style={{margin:'24px 0 42px 0'}}> Login </Button>
                 </div>
 
-                <Typography variant="text" style={{marginBottom:42}}>Caso não tenha uma conta, <a href='/register'>registre-se</a></Typography>
+                <Typography variant="text" style={{marginBottom:42}}>Caso não tenha uma conta, <a href='/register' style={{color:'red', fontWeight:600}}>registre-se</a></Typography>
           </Box>
       </Box>
     </ThemeProvider>
