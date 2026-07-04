@@ -14,6 +14,8 @@ app.use("/auth", usersRoutes);
 app.use("/notes", notesRoutes);
 
 // --  Server --
-var server = app.listen(5000, function () {
-  console.log("Express App running at http://127.0.0.1:5000/");
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Express App running on port ${PORT}`);
 });
