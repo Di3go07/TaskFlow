@@ -2,13 +2,13 @@ import mysql from 'mysql';
 import dotenv from 'dotenv';
 
 dotenv.config();
-const user = process.env.DB_USERNAME;
-const password = process.env.DB_PASSWORD;
 
 const con = mysql.createConnection({
-    host: "localhost",
-    user: user,
-    password: password
+    host: process.env.MYSQLHOST,
+    port: process.env.MYSQLPORT,
+    user: process.env.MYSQLUSER,
+    password: process.env.MYSQLPASSWORD,
+    database: process.env.MYSQLDATABASE
 });
 
 const db = new Promise((resolve, reject) => {
